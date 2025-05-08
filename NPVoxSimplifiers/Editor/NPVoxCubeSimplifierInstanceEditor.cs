@@ -27,8 +27,7 @@ public class NPVoxCubeSimplifierInstanceEditor : Editor
             return;
         }
 
-        bool isPrefab = PrefabUtility.GetPrefabParent(target) == null && PrefabUtility.GetPrefabObject(target) != null;
-
+        bool isPrefab = PrefabUtility.IsAnyPrefabInstanceRoot(instance.gameObject);
         if (!isPrefab)
         {
             if (GUILayout.Button("Align (Shortcut ALT+a)"))

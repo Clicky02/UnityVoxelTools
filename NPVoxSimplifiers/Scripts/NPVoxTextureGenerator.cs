@@ -10,7 +10,7 @@ public class NPVoxTextureGenerator
         int textureHeight
     )
     {
-        texture.Resize(textureWidth, textureHeight, TextureFormat.ARGB32, true);
+        texture.Reinitialize(textureWidth, textureHeight, TextureFormat.ARGB32, true);
         texture.filterMode = FilterMode.Point;
 
         GameObject go = new GameObject();

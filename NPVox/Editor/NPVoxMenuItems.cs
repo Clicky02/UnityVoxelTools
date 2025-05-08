@@ -12,7 +12,7 @@ public class NPVoxMenuItems : ScriptableObject
     [MenuItem("NPVox/Align &a", false)]
     static void MenuAlign()
     {
-        Transform[] transforms = Selection.GetTransforms(SelectionMode.TopLevel | SelectionMode.OnlyUserModifiable);
+        Transform[] transforms = Selection.GetTransforms(SelectionMode.TopLevel | SelectionMode.Editable);
         foreach (Transform transform in transforms)
         {
             if (transform.GetComponentInChildren<NPVoxMeshInstance>())
@@ -28,7 +28,7 @@ public class NPVoxMenuItems : ScriptableObject
     [MenuItem("NPVox/Align &a", true)]
     static bool ValidateAlign()
     {
-        Transform[] transforms = Selection.GetTransforms(SelectionMode.TopLevel | SelectionMode.OnlyUserModifiable);
+        Transform[] transforms = Selection.GetTransforms(SelectionMode.TopLevel | SelectionMode.Editable);
 
         foreach (Transform transform in transforms)
         {
@@ -71,7 +71,7 @@ public class NPVoxMenuItems : ScriptableObject
     [MenuItem("NPVox/Invalidate and Import Selected", false)]
     static void MenuInvalidateAndImportSelected()
     {
-        foreach( UnityEngine.Object target in Selection.objects) 
+        foreach (UnityEngine.Object target in Selection.objects)
         {
             NPipeIImportable[] allImportables = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetByType<NPipeIImportable>(target));
             NPipelineUtils.InvalidateAll(allImportables);
@@ -83,7 +83,7 @@ public class NPVoxMenuItems : ScriptableObject
     [MenuItem("NPVox/Invalidate and Import Selected Deep", false)]
     static void MenuInvalidateAndImportSelectedDeep()
     {
-        foreach( UnityEngine.Object target in Selection.objects) 
+        foreach (UnityEngine.Object target in Selection.objects)
         {
             NPipeIImportable[] allImportables = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetByType<NPipeIImportable>(target));
             NPipelineUtils.InvalidateAll(allImportables, true);

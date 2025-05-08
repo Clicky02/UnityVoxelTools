@@ -46,8 +46,8 @@ public class NPVoxMeshInstanceEditor : Editor
             instance.SharedMash = null;
         }
 
-        bool isPrefab = PrefabUtility.GetPrefabParent(target) == null && PrefabUtility.GetPrefabObject(target) != null;
 
+        bool isPrefab = PrefabUtility.IsAnyPrefabInstanceRoot(instance.gameObject);
         if (!isPrefab)
         {
             if (GUILayout.Button("Align (Shortcut ALT+a)"))
@@ -55,12 +55,12 @@ public class NPVoxMeshInstanceEditor : Editor
                 Align(instance.transform);
             }
         }
-        
+
         NPVoxCubeSimplifier[] simplifiers = NPipelineUtils.FindNextPipeOfType<NPVoxCubeSimplifier>(NPipelineUtils.GetImportables(AssetDatabase.GetAssetPath(instance.MeshFactory as UnityEngine.Object)), instance.MeshFactory);
-        
-        if(simplifiers.Length > 0)
+
+        if (simplifiers.Length > 0)
         {
-            if(GUILayout.Button("Switch to Cube Simplifier instance"))
+            if (GUILayout.Button("Switch to Cube Simplifier instance"))
             {
                 NPVoxCubeSimplifierInstance cubeSimplifier = instance.gameObject.AddComponent<NPVoxCubeSimplifierInstance>();
                 cubeSimplifier.CubeSimplifier = simplifiers[0];
@@ -68,13 +68,13 @@ public class NPVoxMeshInstanceEditor : Editor
                 DestroyImmediate(instance, true);
                 return;
             }
-        } 
-        else 
+        }
+        else
         {
-            if(GUILayout.Button("Create Cube Simplifier"))
+            if (GUILayout.Button("Create Cube Simplifier"))
             {
                 string assetPath = AssetDatabase.GetAssetPath(instance.MeshFactory as UnityEngine.Object);
-                NPVoxCubeSimplifier simplifier = (NPVoxCubeSimplifier) NPipelineUtils.CreateAttachedPipe( assetPath, typeof(NPVoxCubeSimplifier), instance.MeshFactory );
+                NPVoxCubeSimplifier simplifier = (NPVoxCubeSimplifier)NPipelineUtils.CreateAttachedPipe(assetPath, typeof(NPVoxCubeSimplifier), instance.MeshFactory);
                 simplifier.TextureAtlas = (NPVoxTextureAtlas)UnityEditor.AssetDatabase.LoadAssetAtPath(UnityEditor.AssetDatabase.GUIDToAssetPath("b3ed00785c29642baae5806625c1d3c1"), typeof(NPVoxTextureAtlas));
                 simplifier.SourceMaterial = instance.GetComponent<MeshRenderer>().sharedMaterial;
                 AssetDatabase.SaveAssets();

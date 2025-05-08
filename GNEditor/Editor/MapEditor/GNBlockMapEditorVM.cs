@@ -305,7 +305,14 @@ public class GNBlockMapEditorVM : ScriptableObject
 
     public void SelectPrefab(GameObject _prefab)
     {
-        m_currentPrefab = PrefabUtility.FindPrefabRoot(_prefab);
+        if (PrefabUtility.IsPartOfPrefabInstance(_prefab))
+        {
+            m_currentPrefab = PrefabUtility.GetOutermostPrefabInstanceRoot(_prefab);
+        }
+        else
+        {
+            m_currentPrefab = _prefab.transform.root.gameObject;
+        }
         if (OnPrefabChanged != null) OnPrefabChanged();
     }
 
@@ -325,7 +332,7 @@ public class GNBlockMapEditorVM : ScriptableObject
             foreach (Renderer renderer in renderers)
             {
                 EditorUtility.SetSelectedRenderState(renderer, EditorSelectedRenderState.Wireframe);
-//                EditorUtility.SetSelectedWireframeHidden(renderer, false);
+                //                EditorUtility.SetSelectedWireframeHidden(renderer, false);
             }
             m_prefabNavigation.OnFolderChanged -= LoadCurrentRandomBrushFlags;
 
@@ -361,15 +368,15 @@ public class GNBlockMapEditorVM : ScriptableObject
             foreach (Renderer renderer in renderers)
             {
                 EditorUtility.SetSelectedRenderState(renderer, EditorSelectedRenderState.Hidden);
-//                EditorUtility.SetSelectedWireframeHidden(renderer, true);
+                //                EditorUtility.SetSelectedWireframeHidden(renderer, true);
             }
             m_prefabNavigation.OnFolderChanged += LoadCurrentRandomBrushFlags;
-            
+
             MoveChildrenToCorrectTargetLayers();
-            
+
             EditorUtility.SetDirty(m_blockMap);
 
-            if ( !m_currentPrefab )
+            if (!m_currentPrefab)
             {
                 SelectPrefab(m_blockMap.m_prefab);
                 m_prefabNavigation.SetCurrentPrefabPathFromPrefab(m_currentPrefab);
@@ -387,14 +394,14 @@ public class GNBlockMapEditorVM : ScriptableObject
         Transform blockMapTransform = m_blockMap.transform;
         // Debug.Log("zLayer " + CurrentCell.z + " " + CellOffset.z);
 
-        for (int i = 0; i <  blockMapTransform.childCount; )
+        for (int i = 0; i < blockMapTransform.childCount;)
         {
             Transform childTransform = blockMapTransform.GetChild(i);
             GNBlockMapLayer blockMapLayer = childTransform.GetComponent<GNBlockMapLayer>();
-            if ( blockMapLayer && childTransform.childCount == 0)
+            if (blockMapLayer && childTransform.childCount == 0)
             {
-                DestroyImmediate( childTransform.gameObject );
-                EditorUtility.SetDirty( m_blockMap );
+                DestroyImmediate(childTransform.gameObject);
+                EditorUtility.SetDirty(m_blockMap);
             }
             else
             {
@@ -509,7 +516,7 @@ public class GNBlockMapEditorVM : ScriptableObject
             }
 
             EditorUtility.SetSelectedRenderState(created.GetComponent<Renderer>(), EditorSelectedRenderState.Hidden);
-//            EditorUtility.SetSelectedWireframeHidden(created.GetComponent<Renderer>(), true);
+            //            EditorUtility.SetSelectedWireframeHidden(created.GetComponent<Renderer>(), true);
         }
         else
         {
@@ -661,11 +668,11 @@ public class GNBlockMapEditorVM : ScriptableObject
     private bool IsMultipleCellBlock(GameObject gameObject)
     {
         GNBlockMapTile tile = gameObject.GetComponent<GNBlockMapTile>();
-        if(tile && tile.Offset.magnitude > 0)
+        if (tile && tile.Offset.magnitude > 0)
         {
             return true;
         }
-        
+
         MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
         if (!meshFilter || !meshFilter.sharedMesh)
         {
@@ -678,7 +685,7 @@ public class GNBlockMapEditorVM : ScriptableObject
     public string GetTileInfo(GameObject go = null)
     {
         // GameObject go = GetGameObjectUnderMouse();
-        if( go == null)
+        if (go == null)
         {
             go = GetGameObjectUnderMouse();
         }
@@ -693,16 +700,16 @@ public class GNBlockMapEditorVM : ScriptableObject
             return "Bounds extends: " + meshFilter.sharedMesh.bounds.extents + " Center: " + meshFilter.sharedMesh.bounds.center;
         }
         return "No Go";
-    } 
+    }
 
     private Vector3 GetOffsetFor(GameObject gameObject)
     {
         GNBlockMapTile tile = gameObject.GetComponent<GNBlockMapTile>();
-        if(tile)
+        if (tile)
         {
             return tile.Offset;
         }
-        
+
         MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
         if (!meshFilter || !meshFilter.sharedMesh)
         {
@@ -710,7 +717,7 @@ public class GNBlockMapEditorVM : ScriptableObject
         }
         Vector3 sizeHalf = meshFilter.sharedMesh.bounds.extents - Vector3.one;
         sizeHalf.z = -sizeHalf.z;
-        return Align(sizeHalf); 
+        return Align(sizeHalf);
     }
 
     public void BrowseLayer(bool next)
@@ -813,8 +820,7 @@ public class GNBlockMapEditorVM : ScriptableObject
         GameObject go = GetGameObjectUnderMouse();
         if (go)
         {
-            GameObject prefab = PrefabUtility.GetPrefabParent(go) as GameObject;
-            // Debug.Log(prefab);
+            GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
             if (prefab)
             {
                 SelectPrefab(prefab);
@@ -1053,22 +1059,22 @@ public class GNBlockMapEditorVM : ScriptableObject
                 Transform item = layer.transform.GetChild(j);
                 if (m_selectedBox.Contains(item.transform.position))
                 {
-                    Vector3 newPos = Align( mat.MultiplyPoint(item.transform.position) );
-                    
+                    Vector3 newPos = Align(mat.MultiplyPoint(item.transform.position));
+
                     Undo.RecordObject(item, "transform");
                     item.transform.position = newPos;
-                    if(MoveToCorrectTargetLayer(item.gameObject))
+                    if (MoveToCorrectTargetLayer(item.gameObject))
                     {
                         j--;
                     }
                 }
             }
         }
-        
+
         // foreach (Transform child in EnumerateSelectedBoxItems())
         // {
         //     Vector3 newPos = Align( mat.MultiplyPoint(child.transform.position) );
-            
+
         //     Undo.RecordObject(child, "transform");
         //     child.transform.position = newPos;
         //     MoveToCorrectTargetLayer(child.gameObject);
@@ -1089,8 +1095,8 @@ public class GNBlockMapEditorVM : ScriptableObject
             child.transform.position = newPos;
         }
     }
-    
-    public Vector3 Align( Vector3 _source )
+
+    public Vector3 Align(Vector3 _source)
     {
         _source.x = Mathf.Round(_source.x / MIN_GRID_RESOLTION) * MIN_GRID_RESOLTION;
         _source.y = Mathf.Round(_source.y / MIN_GRID_RESOLTION) * MIN_GRID_RESOLTION;
@@ -1180,7 +1186,7 @@ public class GNBlockMapEditorVM : ScriptableObject
             Transform[] transforms = lyr.GetComponentsInChildren<Transform>(true);
             for (int i = 0; i < transforms.Length; i++)
             {
-                if( transforms[i].parent == lyr.transform && FixObject(transforms[i].gameObject) )
+                if (transforms[i].parent == lyr.transform && FixObject(transforms[i].gameObject))
                 {
                     i--;
                 }
@@ -1191,8 +1197,8 @@ public class GNBlockMapEditorVM : ScriptableObject
     private bool FixObject(GameObject gameObject)
     {
         GNBlockMapTile tile = gameObject.GetComponent<GNBlockMapTile>();
-        
-        if(tile != null)
+
+        if (tile != null)
         {
             float z = GetTargetZPosition(gameObject);
             GNBlockMapLayer targetLayer = GetTargetLayer(z, false);
@@ -1202,35 +1208,35 @@ public class GNBlockMapEditorVM : ScriptableObject
                 tile.transform.position += tile.Offset;
                 Debug.LogWarning(" Moving old collision tile to correct position " + tile.transform.position);
             }
-            
+
             UnityEngine.Assertions.Assert.AreEqual(tile.transform.parent.GetComponent<GNBlockMapLayer>(), GetTargetLayer(GetTargetZPosition(gameObject), false));
             return false;
         }
 
-        if( gameObject.isStatic && gameObject.GetComponent<NPVoxCubeSimplifierInstance>() != null)
+        if (gameObject.isStatic && gameObject.GetComponent<NPVoxCubeSimplifierInstance>() != null)
         {
             // if(gameObject)
             // TODO: check for negative scale and revert them?!?
 
             Vector3 scle = gameObject.transform.localScale;
-            if(scle.x < 0)
+            if (scle.x < 0)
             {
                 Undo.RecordObject(gameObject.transform, "fix scale");
-                scle.Scale(new Vector3(-1,1,1));
+                scle.Scale(new Vector3(-1, 1, 1));
                 Debug.LogWarning(" Removing negative scale from object at position " + gameObject.transform.position);
                 gameObject.transform.localScale = scle;
             }
-            if(scle.y < 0)
+            if (scle.y < 0)
             {
                 Undo.RecordObject(gameObject.transform, "fix scale");
-                scle.Scale(new Vector3(1,-1,1));
+                scle.Scale(new Vector3(1, -1, 1));
                 Debug.LogWarning(" Removing negative scale from object at position " + gameObject.transform.position);
                 gameObject.transform.localScale = scle;
             }
-            if(scle.z < 0)
+            if (scle.z < 0)
             {
                 Undo.RecordObject(gameObject.transform, "fix scale");
-                scle.Scale(new Vector3(1,1,-1));
+                scle.Scale(new Vector3(1, 1, -1));
                 Debug.LogWarning(" Removing negative scale from object at position " + gameObject.transform.position);
                 gameObject.transform.localScale = scle;
             }
@@ -1249,7 +1255,7 @@ public class GNBlockMapEditorVM : ScriptableObject
         //     Debug.LogWarning(" Aligning object to position " + pos);
         //     gameObject.transform.position = pos;
         // }
-        
+
         return MoveToCorrectTargetLayer(gameObject);
         // return false;
     }

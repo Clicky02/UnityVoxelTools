@@ -8,9 +8,9 @@ public class NPVoxHandles
 {
     public static float GetMouseScale(Camera cam)
     {
-//        Debug.Log("DPI: " + Screen.dpi);
-//        Debug.Log("Res: " +  Screen.currentResolution);
-       
+        //        Debug.Log("DPI: " + Screen.dpi);
+        //        Debug.Log("Res: " +  Screen.currentResolution);
+
         return SceneView.currentDrawingSceneView.camera.rect.width;
         //return Screen.dpi > 100 ? 2.0f : 1.0f;
     }
@@ -22,7 +22,7 @@ public class NPVoxHandles
         //Debug.Log( SceneView.currentDrawingSceneView.camera.rect.width + " " + Screen.width);
         //SceneView.currentDrawingSceneView.camera.
         //return SceneView.currentDrawingSceneView.camera.rect.width;
-//        return Screen.dpi > 100 ? 0.5f : 1.0f;
+        //        return Screen.dpi > 100 ? 0.5f : 1.0f;
         return 1.0f / SceneView.currentDrawingSceneView.camera.rect.width;
     }
 
@@ -43,14 +43,14 @@ public class NPVoxHandles
         Vector3 voxelCenter = new Vector3();
         NPVoxCoord impactCoord = NPVoxCoord.INVALID;
 
-//        Vector3 offset = SceneView.currentDrawingSceneView.position;
-//        Vector3 mp = Event.current.mousePosition - offset;
+        //        Vector3 offset = SceneView.currentDrawingSceneView.position;
+        //        Vector3 mp = Event.current.mousePosition - offset;
         float mouseScale = GetMouseScale(SceneView.currentDrawingSceneView.camera);
         Ray r = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(
             new Vector3(Event.current.mousePosition.x * mouseScale, -Event.current.mousePosition.y * mouseScale + Camera.current.pixelHeight)
         );
         NPVoxRayCastHit raycastHit = npVoxToUnity.Raycast(r, transform, 20);
-        
+
         if (raycastHit.IsHit)
         {
             impactCoord = raycastHit.Coord;
@@ -59,8 +59,8 @@ public class NPVoxHandles
             // if (isMouseDown)
             {
                 Handles.color = Color.yellow;
-                Handles.CubeCap(controlID, voxelCenter, Quaternion.identity, npVoxToUnity.VoxeSize.x * 2.0f);
-//                SceneView.currentDrawingSceneView.Repaint();
+                Handles.CubeHandleCap(controlID, voxelCenter, Quaternion.identity, npVoxToUnity.VoxeSize.x * 2.0f, EventType.Repaint);
+                //                SceneView.currentDrawingSceneView.Repaint();
             }
         }
         else
@@ -134,7 +134,7 @@ public class NPVoxHandles
         Handles.DrawDottedLine(rightDownBack, rightDownForward, 1f);
         Handles.DrawDottedLine(leftUpBack, leftUpForward, 1f);
         Handles.DrawDottedLine(rightUpBack, rightUpForward, 1f);
-        if(!editable)
+        if (!editable)
         {
             return box;
         }
@@ -280,7 +280,7 @@ public class NPVoxHandles
         //     Handles.color = Color.white;
         // }
 
-        Handles.DotCap(controlID, handlePosition, Quaternion.identity, npVoxToUnity.VoxeSize.x * 0.25f);
+        Handles.DotHandleCap(controlID, handlePosition, Quaternion.identity, npVoxToUnity.VoxeSize.x * 0.25f, EventType.Repaint);
 
         Vector3 screenPosition = Handles.matrix.MultiplyPoint(handlePosition);
 
@@ -337,7 +337,7 @@ public class NPVoxHandles
     {
         int controlID = GUIUtility.GetControlID(FocusType.Passive);
 
-        Handles.DotCap(controlID, handlePosition, Quaternion.identity, npVoxToUnity.VoxeSize.x * 0.25f);
+        Handles.DotHandleCap(controlID, handlePosition, Quaternion.identity, npVoxToUnity.VoxeSize.x * 0.25f, EventType.Repaint);
 
         Vector3 screenPosition = Handles.matrix.MultiplyPoint(handlePosition);
 

@@ -22,11 +22,11 @@ public class GNBlockMapEditorView : Editor
         // GUILayout.Button("StopEditor");
         DrawDefaultInspector();
 
-        if( !m_bActive && (useNextViewModel != null || GUILayout.Button("Edit Blockmap")))
+        if (!m_bActive && (useNextViewModel != null || GUILayout.Button("Edit Blockmap")))
         {
             Enable();
         }
-        else if( m_bActive && GUILayout.Button("Stop Edit Blockmap"))
+        else if (m_bActive && GUILayout.Button("Stop Edit Blockmap"))
         {
             Disable();
         }
@@ -131,7 +131,7 @@ public class GNBlockMapEditorView : Editor
 
     public void OnSceneGUI()
     {
-        if( !m_bActive ) return;
+        if (!m_bActive) return;
 
         if (viewModel.CurrentTool == GNBlockMapEditorVM.Tool.BOX)
         {
@@ -173,14 +173,14 @@ public class GNBlockMapEditorView : Editor
         EditorGUILayout.EndVertical();
         GUILayout.EndArea();
 
-        if(inputController.IsPickingActive() )
+        if (inputController.IsPickingActive())
         {
             GUILayout.BeginArea(new Rect(10, 100, 400, 100));
             GUILayout.Label("Tile Info: " + viewModel.GetTileInfo(), EditorStyles.whiteLargeLabel);
             GUILayout.EndArea();
         }
 
-        if ( Event.current.type == EventType.Layout )
+        if (Event.current.type == EventType.Layout)
         {
             screenScale = NPVoxHandles.GetScreenScale();
         }
@@ -226,7 +226,7 @@ public class GNBlockMapEditorView : Editor
                 if (GUILayout.Button("Delete Tile Component in current Prefab"))
                 {
                     Undo.DestroyObjectImmediate(viewModel.CurrentPrefab.GetComponent<GNBlockMapTile>());
-//                    Repaint();
+                    //                    Repaint();
                 }
             }
             else
@@ -235,8 +235,8 @@ public class GNBlockMapEditorView : Editor
                 {
                     GNBlockMapTile tile2 = viewModel.CurrentPrefab.AddComponent<GNBlockMapTile>();
                     Undo.RegisterCreatedObjectUndo(tile2, "Painted an Object");
-//                    Repaint();
-//                    EditorUtility.SetDirty(viewModel.CurrentPrefab);
+                    //                    Repaint();
+                    //                    EditorUtility.SetDirty(viewModel.CurrentPrefab);
                 }
             }
         }
@@ -317,7 +317,7 @@ public class GNBlockMapEditorView : Editor
         string substr = folder != null && folder.Length > 24 ? folder.Substring(folder.Length - 24) : folder;
         EditorGUILayout.TextField(folder != null ? substr : "NONE");
         Object newPrefab;
-        if ( viewModel.CurrentPrefab != ( newPrefab = EditorGUILayout.ObjectField(viewModel.CurrentPrefab, typeof(GameObject), false)) && newPrefab != null )
+        if (viewModel.CurrentPrefab != (newPrefab = EditorGUILayout.ObjectField(viewModel.CurrentPrefab, typeof(GameObject), false)) && newPrefab != null)
         {
             viewModel.SelectPrefab((GameObject)newPrefab);
         }
@@ -444,27 +444,27 @@ public class GNBlockMapEditorView : Editor
         }
 
         // if (viewModel.CurrentTool == GNBlockMapEditorVM.Tool.ERASE)
-        if( inputController.IsErasingActive() )
+        if (inputController.IsErasingActive())
         {
             Handles.color = new Color(128, 0, 0, 0.25f);
-            Handles.CubeCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize);
+            Handles.CubeHandleCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize, EventType.Repaint);
         }
-        if( inputController.IsPrefabNavigationActive() )
+        if (inputController.IsPrefabNavigationActive())
         {
             Handles.color = new Color(128, 128, 0, 0.05f);
-            Handles.CubeCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize);
+            Handles.CubeHandleCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize, EventType.Repaint);
         }
-        if( inputController.IsPickingActive() )
+        if (inputController.IsPickingActive())
         {
             Handles.color = new Color(128, 128, 0, 0.25f);
-            Handles.CubeCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize);
+            Handles.CubeHandleCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize, EventType.Repaint);
         }
-        if( inputController.IsRotationActive() )
+        if (inputController.IsRotationActive())
         {
             Handles.color = new Color(0, 128, 0, 0.05f);
-            Handles.CubeCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize);
+            Handles.CubeHandleCap(controlID, viewModel.CurrentCell, Quaternion.identity, viewModel.CellSize, EventType.Repaint);
         }
-        
+
         switch (eventType)
         {
             case EventType.Layout:
@@ -676,7 +676,7 @@ public class GNBlockMapEditorView : Editor
     {
         if (m_currentBrush != null)
         {
-            m_currentBrush.transform.position = viewModel.CurrentCell + viewModel.CurrentPrefabOffset;;
+            m_currentBrush.transform.position = viewModel.CurrentCell + viewModel.CurrentPrefabOffset; ;
             m_currentBrush.gameObject.SetActive(viewModel.CurrentTool == GNBlockMapEditorVM.Tool.PAINT /*|| viewModel.CurrentTool == GNBlockMapEditorVM.Tool.BRUSH*/);
         }
 

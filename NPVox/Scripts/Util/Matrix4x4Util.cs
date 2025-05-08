@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 // from http://answers.unity3d.com/questions/402280/how-to-decompose-a-trs-matrix.html
