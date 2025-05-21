@@ -28,10 +28,10 @@ public class NPVoxMeshInstanceEditor : Editor
 
         if ((instance.MeshFactory is NPVoxProcessorBase<Mesh>) && ((NPVoxProcessorBase<Mesh>)instance.MeshFactory).StorageMode == NPipeStorageMode.ATTACHED)
         {
-            if (instance.SharedMash != instance.MeshFactory.GetProduct())
+            if (instance.VoxObjectData != instance.MeshFactory.GetProduct())
             {
                 Undo.RecordObject(instance, "Updated shared mesh");
-                instance.SharedMash = instance.MeshFactory.GetProduct();
+                instance.VoxObjectData = instance.MeshFactory.GetProduct();
             }
         }
         else
@@ -39,11 +39,11 @@ public class NPVoxMeshInstanceEditor : Editor
             GUILayout.Label(
                 "NPVox: The Storage Mode is not set to ATTACHED, thus you are not able to preview the item in the editor, sorry");
             GUILayout.Label(" to see any preview during Editor time.\n", new GUILayoutOption[] { });
-            if (instance.SharedMash != null)
+            if (instance.VoxObjectData != null)
             {
                 Undo.RecordObject(instance, "Unset shared mesh");
             }
-            instance.SharedMash = null;
+            instance.VoxObjectData = null;
         }
 
 

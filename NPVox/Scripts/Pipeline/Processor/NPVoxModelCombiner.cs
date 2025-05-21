@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [NPipeAppendableAttribute("Model Combiner", typeof(NPVoxIModelFactory), false, true)]
-public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxModel>, NPVoxIModelFactory
+public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
     [System.Flags]
     public enum Pivot
@@ -51,7 +51,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
         return sources;
     }
 
-    override protected NPVoxModel CreateProduct(NPVoxModel reuse = null)
+    override protected VoxModel CreateProduct(VoxModel reuse = null)
     {
         if (Sources.Length > 0)
         {
@@ -61,20 +61,20 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
 
             if (!firstSource.Source)
             {
-//                foreach (NPipeIImportable input in NPipelineUtils.EachSource(this))
-//                {
-//                    if (!((UnityEngine.Object)input))
-//                    {
-//                        return NPVoxModel.NewInvalidInstance(reuse, "XXXXX First Source didn't have a factory set");
-//                    }
-//                }
+                //                foreach (NPipeIImportable input in NPipelineUtils.EachSource(this))
+                //                {
+                //                    if (!((UnityEngine.Object)input))
+                //                    {
+                //                        return NPVoxModel.NewInvalidInstance(reuse, "XXXXX First Source didn't have a factory set");
+                //                    }
+                //                }
 
-//                return NPVoxModel.NewInvalidInstance(reuse, "First Source didn't have a factory set");
+                //                return NPVoxModel.NewInvalidInstance(reuse, "First Source didn't have a factory set");
                 throw new NPipeException("First Source didn't have a factory set");
             }
-            NPVoxModel firstProduct = ((NPVoxIModelFactory)firstSource.Source).GetProduct();
+            VoxModel firstProduct = ((NPVoxIModelFactory)firstSource.Source).GetProduct();
 
-            NPVoxModel combinedModel = NPVoxModel.NewInstance(firstProduct, reuse);
+            VoxModel combinedModel = VoxModel.NewInstance(firstProduct, reuse);
 
             if (firstSource.VoxelGroupIndex >= numVoxelGroups)
             {
@@ -85,7 +85,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
             {
                 combinedModel.InitVoxelGroups();
 
-                foreach (NPVoxCoord coord in combinedModel.EnumerateVoxels())
+                foreach (VoxCoord coord in combinedModel.EnumerateVoxels())
                 {
                     combinedModel.SetVoxelGroup(coord, firstSource.VoxelGroupIndex);
                 }
@@ -99,47 +99,47 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
             {
                 if (!Sources[i].Source)
                 {
-//                    foreach (NPipeIImportable input in NPipelineUtils.EachSource(this))
-//                    {
-//                        if (!((UnityEngine.Object)input))
-//                        {
-//                            return NPVoxModel.NewInvalidInstance(reuse, "XXXXX Source " + i + " didn't have a factory set");
-//                        }
-//                    }
-//
-//
-//                    return NPVoxModel.NewInvalidInstance(reuse, "Source " + i + " didn't have a factory set");
+                    //                    foreach (NPipeIImportable input in NPipelineUtils.EachSource(this))
+                    //                    {
+                    //                        if (!((UnityEngine.Object)input))
+                    //                        {
+                    //                            return NPVoxModel.NewInvalidInstance(reuse, "XXXXX Source " + i + " didn't have a factory set");
+                    //                        }
+                    //                    }
+                    //
+                    //
+                    //                    return NPVoxModel.NewInvalidInstance(reuse, "Source " + i + " didn't have a factory set");
 
-                    throw new NPipeException( "Source " + i + " didn't have a factory set");
+                    throw new NPipeException("Source " + i + " didn't have a factory set");
                 }
 
-                NPVoxModel voxModel = ((NPVoxIModelFactory)Sources[i].Source).GetProduct();
+                VoxModel voxModel = ((NPVoxIModelFactory)Sources[i].Source).GetProduct();
 
-//                numVoxels += voxModel.NumVoxels;
+                //                numVoxels += voxModel.NumVoxels;
 
                 Pivot pivot = Sources[i].Pivot;
-                NPVoxCoord offset = NPVoxCoord.ZERO;
+                VoxCoord offset = VoxCoord.ZERO;
                 byte voxelGroupIndex = Sources[i].VoxelGroupIndex;
 
                 if ((pivot & Pivot.Right) == Pivot.Right)
                 {
-                    offset.X = (sbyte)(combinedModel.SizeX - voxModel.SizeX);
+                    offset.x = (sbyte)(combinedModel.SizeX - voxModel.SizeX);
                 }
 
                 if ((pivot & Pivot.Up) == Pivot.Up)
                 {
-                    offset.Y = (sbyte)(combinedModel.SizeY - voxModel.SizeY);
+                    offset.y = (sbyte)(combinedModel.SizeY - voxModel.SizeY);
                 }
 
                 if ((pivot & Pivot.Forward) == Pivot.Forward)
                 {
-                    offset.Z = (sbyte)(combinedModel.SizeZ - voxModel.SizeZ);
+                    offset.z = (sbyte)(combinedModel.SizeZ - voxModel.SizeZ);
                 }
 
                 Dictionary<byte, byte> mapping = new Dictionary<byte, byte>();
-                foreach (NPVoxCoord coord in voxModel.EnumerateVoxels())
+                foreach (VoxCoord coord in voxModel.EnumerateVoxels())
                 {
-                    NPVoxCoord targetCoord = coord + offset;
+                    VoxCoord targetCoord = coord + offset;
                     byte sourceColor = voxModel.GetVoxel(coord);
                     byte targetColor = 0;
                     if (!mapping.ContainsKey(sourceColor))
@@ -162,7 +162,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
                 }
             }
 
-//            combinedModel.NumVoxels = numVoxels;
+            //            combinedModel.NumVoxels = numVoxels;
             combinedModel.RecalculateNumVoxels();
             combinedModel.NumVoxelGroups = numVoxelGroups;
             combinedModel.Colortable = colorTable;
@@ -171,7 +171,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
         }
         else
         {
-            return NPVoxModel.NewInvalidInstance(reuse, "No Sources Setup");
+            return VoxModel.NewInvalidInstance(reuse, "No Sources Setup");
         }
     }
 

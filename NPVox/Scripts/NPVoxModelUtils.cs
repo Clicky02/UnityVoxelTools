@@ -4,10 +4,10 @@ using UnityEngine;
 
 public static class NPVoxModelUtils
 {
-    public static byte AddBrightenColor(NPVoxModel model)
+    public static byte AddBrightenColor(VoxModel model)
     {
         byte color = FindUnusedColor(model);
-        if(color != 0)
+        if (color != 0)
         {
             Color32 brightenColor32 = model.Colortable[color];
             model.Colortable[color] = NPVoxModelUtils.BrightenColor(brightenColor32);
@@ -15,22 +15,25 @@ public static class NPVoxModelUtils
         return color;
     }
 
-    public static bool[] GetUsedColors(NPVoxModel model)
+    public static bool[] GetUsedColors(VoxModel model)
     {
         bool[] usedColors = new bool[model.Colortable.Length];
-        foreach (NPVoxCoord coord in model.EnumerateVoxels())
+        foreach (var comp in model.Components)
         {
-            usedColors[model.GetVoxel(coord)] = true;
+            foreach (VoxCoord coord in comp.EnumerateVoxels())
+            {
+                usedColors[comp.GetVoxel(coord)] = true;
+            }
         }
         return usedColors;
     }
 
-    public static byte FindUnusedColor(NPVoxModel model)
+    public static byte FindUnusedColor(VoxModel model)
     {
         bool[] usedColors = GetUsedColors(model);
         for (byte i = 1; i != 0; i++)
         {
-            if(!usedColors[i])
+            if (!usedColors[i])
             {
                 return i;
             }
@@ -43,7 +46,7 @@ public static class NPVoxModelUtils
     {
         for (byte i = 1; i != 0; i++)
         {
-            if(usedColors[i] && num-- == 0)
+            if (usedColors[i] && num-- == 0)
             {
                 return i;
             }
@@ -55,7 +58,7 @@ public static class NPVoxModelUtils
     {
         for (byte i = 1; i != 0; i++)
         {
-            if(!usedColors[i])
+            if (!usedColors[i])
             {
                 usedColors[i] = true;
                 return i;
@@ -71,7 +74,7 @@ public static class NPVoxModelUtils
         count += returnColor.r * 8 > 100 ? 1 : 0;
         count += returnColor.g * 8 > 100 ? 1 : 0;
         count += returnColor.b * 8 > 100 ? 1 : 0;
-        if( count > 1 )
+        if (count > 1)
         {
             returnColor.r = returnColor.g = returnColor.b = 0;
         }
@@ -80,7 +83,7 @@ public static class NPVoxModelUtils
             returnColor.r = (byte)(Mathf.Min(255, returnColor.g * 8));
             returnColor.g = (byte)(Mathf.Min(255, returnColor.b * 8));
             returnColor.b = (byte)(Mathf.Min(255, returnColor.r * 8));
-//            returnColor.r = returnColor.g = returnColor.b = 254;
+            //            returnColor.r = returnColor.g = returnColor.b = 254;
         }
         return returnColor;
     }

@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[NPipeAppendableAttribute( "Mesh Output", typeof( NPVoxIModelFactory ), true, true )]
-public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, Mesh>, NPVoxIMeshFactory, NPipeIInstantiable
+[NPipeAppendableAttribute("Mesh Output", typeof(NPVoxIModelFactory), true, true)]
+public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxObjectData>, NPVoxIMeshFactory, NPipeIInstantiable
 {
     public Vector3 VoxelSize = Vector3.one * 0.125f;
     public Vector3 NormalVariance = Vector3.zero;
@@ -12,7 +12,7 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
     public int BloodColorIndex = 0;
     public NPVoxFaces Loop = new NPVoxFaces();
     public NPVoxFaces Cutout = new NPVoxFaces();
-    public NPVoxFaces Include = new NPVoxFaces( 1, 1, 1, 1, 1, 1 );
+    public NPVoxFaces Include = new NPVoxFaces(1, 1, 1, 1, 1, 1);
     public int MinVertexGroups = 1;
     public NPVoxNormalMode[] NormalModePerVoxelGroup = null;
     public NPVoxNormalProcessorList NormalProcessors = null;
@@ -25,7 +25,7 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
         {
             NormalVarianceSeed = Random.Range(0, int.MaxValue);
         }
-        
+
         if (NormalProcessors == null)
         {
             NormalProcessors = ScriptableObject.CreateInstance<NPVoxNormalProcessorList>();
@@ -34,10 +34,10 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
 
     public void OnDisable()
     {
-        
+
     }
 
-    override protected Mesh CreateProduct(Mesh reuse = null)
+    override protected NPVoxObjectData CreateProduct(NPVoxObjectData reuse = null)
     {
         Mesh mesh = reuse != null ? reuse : new Mesh();
         if (Input == null)
@@ -47,11 +47,11 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
             return mesh;
         }
 
-        NPVoxModel model = GetVoxModel();
+        VoxModel model = GetVoxModel();
         if (model)
         {
             mesh.Clear();
-            if( !model.IsValid)
+            if (!model.IsValid)
             {
                 Debug.LogWarning("Source Model is not valid");
                 return mesh;
@@ -91,13 +91,13 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
 
         string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
         Object mainAsset = UnityEditor.AssetDatabase.LoadMainAssetAtPath(assetPath);
-        if( mainAsset )
+        if (mainAsset)
         {
             instance.name = mainAsset.name;
         }
         if ((instance.MeshFactory is NPVoxProcessorBase<Mesh>) && ((NPVoxProcessorBase<Mesh>)instance.MeshFactory).StorageMode == NPipeStorageMode.ATTACHED)
         {
-            instance.SharedMash = instance.MeshFactory.GetProduct();
+            instance.VoxObjectData = instance.MeshFactory.GetProduct();
         }
 
         UnityEditor.Undo.RegisterCreatedObjectUndo(go, "Created a new NPVoxInstance");
@@ -113,7 +113,7 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
 #endif
     }
 
-    public NPVoxModel GetVoxModel()
+    public VoxModel GetVoxModel()
     {
         return Input != null ? ((NPVoxIModelFactory)Input).GetProduct() : null;
     }
@@ -122,16 +122,16 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
     {
         return new NPVoxToUnity(GetVoxModel(), VoxelSize);
     }
-    
-    public NPVoxCoord GetOutputSize()
+
+    public VoxCoord GetOutputSize()
     {
-        NPVoxModel model = GetVoxModel();
-        NPVoxCoord size = model.Size;
+        VoxModel model = GetVoxModel();
+        VoxCoord size = model.Size;
         if (Cutout != null)
         {
-            size.X = (sbyte)( size.X - (sbyte)Mathf.Abs(Cutout.Left) - (sbyte)Mathf.Abs(Cutout.Right) );
-            size.Y = (sbyte)( size.Y - (sbyte)Mathf.Abs(Cutout.Up) - (sbyte)Mathf.Abs(Cutout.Down) );
-            size.Z = (sbyte)( size.Z - (sbyte)Mathf.Abs(Cutout.Back) - (sbyte)Mathf.Abs(Cutout.Forward) );
+            size.x = (sbyte)(size.x - (sbyte)Mathf.Abs(Cutout.Left) - (sbyte)Mathf.Abs(Cutout.Right));
+            size.y = (sbyte)(size.y - (sbyte)Mathf.Abs(Cutout.Up) - (sbyte)Mathf.Abs(Cutout.Down));
+            size.z = (sbyte)(size.z - (sbyte)Mathf.Abs(Cutout.Back) - (sbyte)Mathf.Abs(Cutout.Forward));
         }
         return size;
     }
@@ -145,8 +145,8 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
     public override UnityEngine.Object Clone()
     {
         NPVoxMeshOutput copy = (NPVoxMeshOutput)base.Clone();
-        copy.NormalVarianceSeed =  Random.Range(0, int.MaxValue);
-        
+        copy.NormalVarianceSeed = Random.Range(0, int.MaxValue);
+
         copy.NormalProcessors = NormalProcessors.Clone() as NPVoxNormalProcessorList;
         copy.NormalProcessors.RequiresMigration = false;
 
@@ -170,7 +170,7 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
         }
 
         // Normal processor migration code
-        if ( NormalProcessors && NormalProcessors.RequiresMigration )
+        if (NormalProcessors && NormalProcessors.RequiresMigration)
         {
             if (UnityEditor.AssetDatabase.GetAssetPath(NormalProcessors).Length == 0)
             {
@@ -207,7 +207,7 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
 
         m_voxMeshData = NPVoxMeshGenerator.GenerateVoxMeshData(GetVoxModel(), VoxelSize, Optimization, BloodColorIndex, Loop, Cutout, Include);
 
-        if ( NormalProcessors != null )
+        if (NormalProcessors != null)
         {
             NormalProcessors.OnImport();
         }
@@ -215,9 +215,9 @@ public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, M
 
     public NPVoxMeshData[] GetVoxMeshData()
     {
-        if ( m_voxMeshData == null )
+        if (m_voxMeshData == null)
         {
-            m_voxMeshData = NPVoxMeshGenerator.GenerateVoxMeshData( GetVoxModel(), VoxelSize, Optimization, BloodColorIndex, Loop, Cutout, Include );
+            m_voxMeshData = NPVoxMeshGenerator.GenerateVoxMeshData(GetVoxModel(), VoxelSize, Optimization, BloodColorIndex, Loop, Cutout, Include);
         }
 
         return m_voxMeshData;

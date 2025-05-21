@@ -1,6 +1,6 @@
 ﻿public class NPVoxRayCastHit
 {
-    public NPVoxRayCastHit(bool isHit, NPVoxCoord coord)
+    public NPVoxRayCastHit(bool isHit, VoxCoord coord)
     {
         this.isHit = isHit;
         this.coord = coord;
@@ -15,8 +15,8 @@
         }
     }
 
-    private NPVoxCoord coord;
-    public NPVoxCoord Coord
+    private VoxCoord coord;
+    public VoxCoord Coord
     {
         get
         {

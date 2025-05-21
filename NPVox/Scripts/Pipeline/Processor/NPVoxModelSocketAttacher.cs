@@ -2,25 +2,25 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [NPipeAppendableAttribute("Socket Attacher", typeof(NPVoxIModelFactory), true, true)]
-public class NPVoxModelSocketAttacher : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxModel>, NPVoxIModelFactory
+public class NPVoxModelSocketAttacher : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
-    public NPVoxSocket[] AddSockets = new NPVoxSocket[]{};
+    public NPVoxSocket[] AddSockets = new NPVoxSocket[] { };
 
-    override protected NPVoxModel CreateProduct(NPVoxModel reuse = null)
+    override protected VoxModel CreateProduct(VoxModel reuse = null)
     {
-        if(Input == null)
+        if (Input == null)
         {
-            return NPVoxModel.NewInvalidInstance(reuse, "No Input Setup");
+            return VoxModel.NewInvalidInstance(reuse, "No Input Setup");
         }
         else
         {
-            NPVoxModel sourceModel = ((NPVoxIModelFactory)Input).GetProduct();
+            VoxModel sourceModel = ((NPVoxIModelFactory)Input).GetProduct();
 
-            NPVoxModel productModel = NPVoxModel.NewInstance(sourceModel, reuse);
+            VoxModel productModel = VoxModel.NewInstance(sourceModel, reuse);
             productModel.CopyOver(sourceModel);
             if (sourceModel.IsValid)
             {
-                foreach (NPVoxCoord coord in sourceModel.BoundingBox.Enumerate())
+                foreach (VoxCoord coord in sourceModel.BoundingBox.Enumerate())
                 {
                     if (sourceModel.HasVoxel(coord))
                     {

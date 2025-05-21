@@ -7,7 +7,7 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
     [System.Serializable]
     public struct Character
     {
-        public NPVoxCoord Size;
+        public VoxCoord Size;
         public Vector3 VoxelSize;
         public Mesh mesh;
         public Material material;
@@ -25,9 +25,9 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
 
     public Character GetCharacter(char c)
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         Import();
-        #endif
+#endif
         return Characters[(int)c];
     }
 
@@ -57,7 +57,7 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
 
     public void Destroy()
     {
-        Characters = new Character[]{ };
+        Characters = new Character[] { };
     }
 
     public string GetTypeName()
@@ -75,9 +75,9 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
         return Instantiate(this);
     }
 
-    public virtual void IncludeSubAssets(string path) {}
+    public virtual void IncludeSubAssets(string path) { }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     public double GetLastInvalidatedTime()
     {
         return 0.0f;
@@ -96,7 +96,7 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
         }
     }
 
-    private void UpdateCharacters() 
+    private void UpdateCharacters()
     {
         if (Characters.Length != 128)
         {
@@ -109,7 +109,7 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
             NPVoxCubeSimplifier[] simplifier = NPipelineUtils.GetByType<NPVoxCubeSimplifier>(allAssets);
             if (simplifier.Length == 1)
             {
-//                Debug.Log("found character: " + simplifier[0]);
+                //                Debug.Log("found character: " + simplifier[0]);
                 character.material = simplifier[0].GetAtlasMaterial();
                 character.mesh = simplifier[0].GetProduct();
                 if (simplifier[0].InputMeshFactory)
@@ -128,5 +128,5 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
             Characters[i] = character;
         }
     }
-    #endif
+#endif
 }

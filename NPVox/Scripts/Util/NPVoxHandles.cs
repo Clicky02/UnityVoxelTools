@@ -27,21 +27,21 @@ public class NPVoxHandles
     }
 
     private static Vector2 mouseStartPos = Vector2.zero;
-    private static NPVoxCoord startCoordVox;
+    private static VoxCoord startCoordVox;
     private static sbyte startCoord;
 
-    public static NPVoxCoord VoxelPicker(NPVoxToUnity npVoxToUnity, NPVoxCoord previousSelectedCoord, int buttonNum, Transform transform)
+    public static VoxCoord VoxelPicker(NPVoxToUnity npVoxToUnity, VoxCoord previousSelectedCoord, int buttonNum, Transform transform)
     {
         if (npVoxToUnity == null)
         {
-            return NPVoxCoord.INVALID;
+            return VoxCoord.INVALID;
         }
 
         int controlID = GUIUtility.GetControlID(FocusType.Passive);
         EventType eventType = Event.current.GetTypeForControl(controlID);
 
         Vector3 voxelCenter = new Vector3();
-        NPVoxCoord impactCoord = NPVoxCoord.INVALID;
+        VoxCoord impactCoord = VoxCoord.INVALID;
 
         //        Vector3 offset = SceneView.currentDrawingSceneView.position;
         //        Vector3 mp = Event.current.mousePosition - offset;
@@ -143,8 +143,8 @@ public class NPVoxHandles
 
         if (SceneView.currentDrawingSceneView.camera.orthographic)
         {
-            NPVoxCoord oldCoord;
-            NPVoxCoord newCoord;
+            VoxCoord oldCoord;
+            VoxCoord newCoord;
 
             oldCoord = box.LeftDownBack;
             newCoord = NPVoxHandles.DrawVoxelHandle(leftDownBack, oldCoord, npVoxToUnity);
@@ -267,7 +267,7 @@ public class NPVoxHandles
         return newBox;
     }
 
-    public static NPVoxCoord DrawVoxelHandle(Vector3 handlePosition, NPVoxCoord voxPosition, NPVoxToUnity npVoxToUnity)
+    public static VoxCoord DrawVoxelHandle(Vector3 handlePosition, VoxCoord voxPosition, NPVoxToUnity npVoxToUnity)
     {
         int controlID = GUIUtility.GetControlID(FocusType.Passive);
 
@@ -320,7 +320,7 @@ public class NPVoxHandles
                     GUI.changed = true;
 
                     Vector3 pos = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition).origin - HandleUtility.GUIPointToWorldRay(mouseStartPos).origin;
-                    NPVoxCoord result = startCoordVox + npVoxToUnity.ToVoxDirection(pos);
+                    VoxCoord result = startCoordVox + npVoxToUnity.ToVoxDirection(pos);
                     if (!result.Equals(voxPosition))
                     {
                         SceneView.RepaintAll();
@@ -380,15 +380,15 @@ public class NPVoxHandles
                     sbyte result;
                     if (axis == Vector3.forward)
                     {
-                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.forward * transl).Z);
+                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.forward * transl).z);
                     }
                     else if (axis == Vector3.right)
                     {
-                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.right * transl).X);
+                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.right * transl).x);
                     }
                     else
                     {
-                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.up * transl).Y);
+                        result = (sbyte)(startCoord + npVoxToUnity.ToVoxDirection(Vector3.up * transl).y);
                     }
                     if (result != voxPosition)
                     {

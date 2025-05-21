@@ -1,29 +1,29 @@
 using UnityEngine;
 
-[NPipeAppendableAttribute("Model Flipper", typeof(NPVoxIModelFactory), true, true)]
-public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxModel>, NPVoxIModelFactory
+[NPipeAppendable("Model Flipper", typeof(NPVoxIModelFactory), true, true)]
+public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
-    public NPVoxCoord XAxis = new NPVoxCoord(1, 0, 0);
-    public NPVoxCoord YAxis = new NPVoxCoord(0, 1, 0);
-    public NPVoxCoord ZAxis = new NPVoxCoord(0, 0, 1);
+    public VoxCoord XAxis = new VoxCoord(1, 0, 0);
+    public VoxCoord YAxis = new VoxCoord(0, 1, 0);
+    public VoxCoord ZAxis = new VoxCoord(0, 0, 1);
 
-    override protected NPVoxModel CreateProduct(NPVoxModel reuse = null)
+    override protected VoxModel CreateProduct(VoxModel reuse = null)
     {
         if (Input == null)
         {
-            return NPVoxModel.NewInvalidInstance(reuse, "No Input Setup");
+            return VoxModel.NewInvalidInstance(reuse, "No Input Setup");
         }
-        NPVoxModel model = ((NPVoxIModelFactory)Input).GetProduct();
+        VoxModel model = ((NPVoxIModelFactory)Input).GetProduct();
         return CreateFlippedModel(model, XAxis, YAxis, ZAxis, reuse);
     }
 
-    public static NPVoxModel CreateFlippedModel(NPVoxModel source, NPVoxCoord xFlip, NPVoxCoord yFlip, NPVoxCoord zFlip, NPVoxModel reuse = null)
+    public static VoxModel CreateFlippedModel(VoxModel source, VoxCoord xFlip, VoxCoord yFlip, VoxCoord zFlip, VoxModel reuse = null)
     {
 
-        sbyte sizeX = (sbyte)(xFlip.X * source.SizeX + xFlip.Z * source.SizeZ + xFlip.Y * source.SizeY);
-        sbyte sizeY = (sbyte)(yFlip.X * source.SizeX + yFlip.Z * source.SizeZ + yFlip.Y * source.SizeY);
-        sbyte sizeZ = (sbyte)(zFlip.X * source.SizeX + zFlip.Z * source.SizeZ + zFlip.Y * source.SizeY);
-        NPVoxModel model = NPVoxModel.NewInstance(source, new NPVoxCoord(
+        sbyte sizeX = (sbyte)(xFlip.x * source.SizeX + xFlip.z * source.SizeZ + xFlip.y * source.SizeY);
+        sbyte sizeY = (sbyte)(yFlip.x * source.SizeX + yFlip.z * source.SizeZ + yFlip.y * source.SizeY);
+        sbyte sizeZ = (sbyte)(zFlip.x * source.SizeX + zFlip.z * source.SizeZ + zFlip.y * source.SizeY);
+        VoxModel model = VoxModel.NewInstance(source, new VoxCoord(
             (sbyte)Mathf.Abs(sizeX),
             (sbyte)Mathf.Abs(sizeY),
             (sbyte)Mathf.Abs(sizeZ)
@@ -62,12 +62,12 @@ public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory,
         model.NumVoxels = source.NumVoxels;
 
         // Transform Coordinates
-        foreach (NPVoxCoord sourceCoord in source.Enumerate())
+        foreach (VoxCoord sourceCoord in source.Enumerate())
         {
-            NPVoxCoord coord = new NPVoxCoord(
-                (sbyte)(xOffset + (xFlip.X * sourceCoord.X + xFlip.Z * sourceCoord.Z + xFlip.Y * sourceCoord.Y)),
-                (sbyte)(yOffset + (yFlip.X * sourceCoord.X + yFlip.Z * sourceCoord.Z + yFlip.Y * sourceCoord.Y)),
-                (sbyte)(zOffset + (zFlip.X * sourceCoord.X + zFlip.Z * sourceCoord.Z + zFlip.Y * sourceCoord.Y))
+            VoxCoord coord = new VoxCoord(
+                (sbyte)(xOffset + (xFlip.x * sourceCoord.x + xFlip.z * sourceCoord.z + xFlip.y * sourceCoord.y)),
+                (sbyte)(yOffset + (yFlip.x * sourceCoord.x + yFlip.z * sourceCoord.z + yFlip.y * sourceCoord.y)),
+                (sbyte)(zOffset + (zFlip.x * sourceCoord.x + zFlip.z * sourceCoord.z + zFlip.y * sourceCoord.y))
             );
             coord = model.LoopCoord(coord, allFaces);
 
@@ -79,20 +79,20 @@ public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory,
         }
 
         // Transform Sockets
-//        Matrix4x4 t = Matrix4x4.identity;
-//        if (xFlip.X != 0) t = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(xFlip.X, 1, 1));
-//        if (xFlip.Y != 0) t *= Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, xFlip.Y, 1));
-//        if (xFlip.Z != 0) t *= Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, 1, xFlip.Z));
+        //        Matrix4x4 t = Matrix4x4.identity;
+        //        if (xFlip.X != 0) t = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(xFlip.X, 1, 1));
+        //        if (xFlip.Y != 0) t *= Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, xFlip.Y, 1));
+        //        if (xFlip.Z != 0) t *= Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1, 1, xFlip.Z));
 
-        NPVoxSocket[] sockets = new NPVoxSocket[ source.Sockets.Length ];
-        for(int i = 0; i < sockets.Length; i++)
+        NPVoxSocket[] sockets = new NPVoxSocket[source.Sockets.Length];
+        for (int i = 0; i < sockets.Length; i++)
         {
             // Anchor
-            NPVoxCoord sourceCoord = source.Sockets[i].Anchor;
-            NPVoxCoord anchorCoord = new NPVoxCoord(
-                (sbyte)(xOffset + (xFlip.X * sourceCoord.X + xFlip.Z * sourceCoord.Z + xFlip.Y * sourceCoord.Y)),
-                (sbyte)(yOffset + (yFlip.X * sourceCoord.X + yFlip.Z * sourceCoord.Z + yFlip.Y * sourceCoord.Y)),
-                (sbyte)(zOffset + (zFlip.X * sourceCoord.X + zFlip.Z * sourceCoord.Z + zFlip.Y * sourceCoord.Y))
+            VoxCoord sourceCoord = source.Sockets[i].Anchor;
+            VoxCoord anchorCoord = new VoxCoord(
+                (sbyte)(xOffset + (xFlip.x * sourceCoord.x + xFlip.z * sourceCoord.z + xFlip.y * sourceCoord.y)),
+                (sbyte)(yOffset + (yFlip.x * sourceCoord.x + yFlip.z * sourceCoord.z + yFlip.y * sourceCoord.y)),
+                (sbyte)(zOffset + (zFlip.x * sourceCoord.x + zFlip.z * sourceCoord.z + zFlip.y * sourceCoord.y))
             );
             anchorCoord = model.LoopCoord(anchorCoord, allFaces);
 
@@ -106,15 +106,15 @@ public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory,
             Vector3 anchorUp = rotation * Vector3.up;
             Vector3 anchorForward = rotation * Vector3.forward;
 
-            Vector3 newRight = anchorRight; 
+            Vector3 newRight = anchorRight;
             Vector3 newUp = anchorUp;
             Vector3 newForward = anchorForward;
 
-            if (xFlip.X < 0)
+            if (xFlip.x < 0)
             {
-                newRight.Scale( new Vector3(-1f, 1f, 1f) );
-                newUp.Scale( new Vector3(-1f, 1f, 1f) );
-                newForward.Scale( new Vector3(-1f, 1f, 1f)  );
+                newRight.Scale(new Vector3(-1f, 1f, 1f));
+                newUp.Scale(new Vector3(-1f, 1f, 1f));
+                newForward.Scale(new Vector3(-1f, 1f, 1f));
                 Quaternion q = Quaternion.LookRotation(newForward, newUp);
                 sockets[i].EulerAngles = q.eulerAngles;
             }

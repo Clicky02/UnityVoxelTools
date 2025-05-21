@@ -6,7 +6,7 @@ public class NPVoxToUnity
     private Vector3 unitySize;
     private Vector3 voxelSize;
     private Vector3 voxelOffset;
-    private NPVoxModel voxModel;
+    private VoxModel voxModel;
 
     public Vector3 UnityVoxModelSize
     {
@@ -25,12 +25,12 @@ public class NPVoxToUnity
     }
 
 
-    public NPVoxToUnity(NPVoxCoord voxModelSize, Vector3 voxelSize)
+    public NPVoxToUnity(VoxCoord voxModelSize, Vector3 voxelSize)
     {
         this.voxModel = null;
         this.voxelSize = voxelSize;
         this.voxelOffset = Vector3.zero;
-        this.unitySize = new Vector3(voxelSize.x * voxModelSize.X, voxelSize.y * voxModelSize.Y, voxelSize.z * voxModelSize.Z);
+        this.unitySize = new Vector3(voxelSize.x * voxModelSize.x, voxelSize.y * voxModelSize.y, voxelSize.z * voxModelSize.z);
     }
 
     public NPVoxToUnity(Vector3 unityModelSize, Vector3 voxelSize)
@@ -41,7 +41,7 @@ public class NPVoxToUnity
         this.unitySize = unityModelSize;
     }
 
-    public NPVoxToUnity(NPVoxModel voxModel, Vector3 voxelSize)
+    public NPVoxToUnity(VoxModel voxModel, Vector3 voxelSize)
     {
         this.voxModel = voxModel;
         this.voxelSize = voxelSize;
@@ -57,7 +57,7 @@ public class NPVoxToUnity
         }
     }
 
-    public NPVoxToUnity(NPVoxModel voxModel, Vector3 voxelSize, Vector3 voxelOffset)
+    public NPVoxToUnity(VoxModel voxModel, Vector3 voxelSize, Vector3 voxelOffset)
     {
         this.voxModel = voxModel;
         this.voxelSize = voxelSize;
@@ -73,36 +73,36 @@ public class NPVoxToUnity
         }
     }
 
-    public Vector3 ToUnityDirection(NPVoxCoord voxCoord)
+    public Vector3 ToUnityDirection(VoxCoord voxCoord)
     {
         return new Vector3(
-            voxCoord.X * voxelSize.x,
-            voxCoord.Y * voxelSize.y,
-            voxCoord.Z * voxelSize.z
+            voxCoord.x * voxelSize.x,
+            voxCoord.y * voxelSize.y,
+            voxCoord.z * voxelSize.z
         );
     }
 
-    public Vector3 ToUnityPosition(NPVoxCoord voxCoord)
+    public Vector3 ToUnityPosition(VoxCoord voxCoord)
     {
         return new Vector3(
-            this.voxelOffset.x - unitySize.x * 0.5f + voxCoord.X * voxelSize.x + voxelSize.x * 0.5f,
-            this.voxelOffset.y - unitySize.y * 0.5f + voxCoord.Y * voxelSize.y + voxelSize.y * 0.5f,
-            this.voxelOffset.z - unitySize.z * 0.5f + voxCoord.Z * voxelSize.z + voxelSize.z * 0.5f
+            this.voxelOffset.x - unitySize.x * 0.5f + voxCoord.x * voxelSize.x + voxelSize.x * 0.5f,
+            this.voxelOffset.y - unitySize.y * 0.5f + voxCoord.y * voxelSize.y + voxelSize.y * 0.5f,
+            this.voxelOffset.z - unitySize.z * 0.5f + voxCoord.z * voxelSize.z + voxelSize.z * 0.5f
         );
     }
 
-    public NPVoxCoord ToVoxCoord(Vector3 unityPosition)
+    public VoxCoord ToVoxCoord(Vector3 unityPosition)
     {
-        return new NPVoxCoord(
+        return new VoxCoord(
             (sbyte)(Mathf.Round((unityPosition.x - this.voxelOffset.x + unitySize.x * 0.5f - voxelSize.x * 0.5f) / voxelSize.x)),
             (sbyte)(Mathf.Round((unityPosition.y - this.voxelOffset.y + unitySize.y * 0.5f - voxelSize.y * 0.5f) / voxelSize.y)),
             (sbyte)(Mathf.Round((unityPosition.z - this.voxelOffset.z + unitySize.z * 0.5f - voxelSize.z * 0.5f) / voxelSize.z))
         );
     }
 
-    public NPVoxCoord ToVoxDirection(Vector3 unityDirection)
+    public VoxCoord ToVoxDirection(Vector3 unityDirection)
     {
-        return new NPVoxCoord(
+        return new VoxCoord(
             (sbyte)(Mathf.Round((unityDirection.x) / voxelSize.x)),
             (sbyte)(Mathf.Round((unityDirection.y) / voxelSize.y)),
             (sbyte)(Mathf.Round((unityDirection.z) / voxelSize.z))
@@ -118,7 +118,7 @@ public class NPVoxToUnity
         // TODO walking there is really stupid ^^ find way to project the transformPoint onto the VoxModel-s boundaries as a start position
         while (travelledDistance < distance)
         {
-            NPVoxCoord coord = ToVoxCoord(transformedPoint);
+            VoxCoord coord = ToVoxCoord(transformedPoint);
             if (!this.voxModel.IsInside(coord) || !this.voxModel.HasVoxel(coord))
             {
                 transformedPoint += transformedDirection * voxelSize.x;
@@ -130,7 +130,7 @@ public class NPVoxToUnity
             }
         }
 
-        return new NPVoxRayCastHit(false, NPVoxCoord.INVALID);
+        return new NPVoxRayCastHit(false, VoxCoord.INVALID);
     }
 
     public Vector3 ToUnityPosition(Vector3 saveVoxCoord)

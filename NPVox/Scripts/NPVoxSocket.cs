@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public struct NPVoxSocket
 {
     [SerializeField]
-    public NPVoxCoord Anchor;
+    public VoxCoord Anchor;
     [SerializeField]
     public Vector3 EulerAngles;
     [SerializeField]

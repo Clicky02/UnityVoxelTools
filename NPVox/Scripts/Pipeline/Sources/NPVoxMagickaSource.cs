@@ -5,12 +5,12 @@ using UnityEditor;
 using System.IO;
 
 [NPipeStartingAttribute("Magicka Source", true)]
-public class NPVoxMagickaSource : NPVoxProcessorBase<NPVoxModel>, NPVoxIModelFactory
+public class NPVoxMagickaSource : NPVoxProcessorBase<VoxModel>, NPVoxIModelFactory
 {
     [HideInInspector]
     public string VoxModelUUID;
 
-    override protected NPVoxModel CreateProduct(NPVoxModel reuse = null)
+    override protected VoxModel CreateProduct(VoxModel reuse = null)
     {
 #if !UNITY_EDITOR
             Debug.LogWarning("Cannot create Voxel Models during runtime right now");
@@ -19,7 +19,7 @@ public class NPVoxMagickaSource : NPVoxProcessorBase<NPVoxModel>, NPVoxIModelFac
             return null;
 #else        
         string assetPath = UnityEditor.AssetDatabase.GUIDToAssetPath(VoxModelUUID);
-        if( string.IsNullOrEmpty( this.InstanceName ))
+        if (string.IsNullOrEmpty(this.InstanceName))
         {
             this.InstanceName = assetPath.Substring(assetPath.LastIndexOf("/") + 1);
         }
@@ -27,12 +27,12 @@ public class NPVoxMagickaSource : NPVoxProcessorBase<NPVoxModel>, NPVoxIModelFac
         if (!File.Exists(assetPath))
         {
             Debug.LogWarning("Could not find file for UUID '" + VoxModelUUID + "' in " + AssetDatabase.GetAssetPath(this) + "");
-            return NPVoxModel.NewInvalidInstance(reuse, "The source file didn't exist");
+            return VoxModel.NewInvalidInstance(reuse, "The source file didn't exist");
         }
 
         FileStream fs = File.OpenRead(assetPath);
         BinaryReader reader = new BinaryReader(fs);
-        NPVoxModel voxModel = NPVoxReader.Read(reader, reuse);
+        VoxModel voxModel = VoxReader.Read(reader, reuse);
         fs.Close();
         if (voxModel)
         {
@@ -41,7 +41,7 @@ public class NPVoxMagickaSource : NPVoxProcessorBase<NPVoxModel>, NPVoxIModelFac
         }
         else
         {
-            return NPVoxModel.NewInvalidInstance(reuse, "Voxmodel could not be parsed");
+            return VoxModel.NewInvalidInstance(reuse, "Voxmodel could not be parsed");
         }
 #endif
     }

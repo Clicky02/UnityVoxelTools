@@ -10,13 +10,13 @@ public class NPVoxBox
     {
         get
         {
-            return new NPVoxBox( NPVoxCoord.INVALID, NPVoxCoord.INVALID );
+            return new NPVoxBox(VoxCoord.INVALID, VoxCoord.INVALID);
         }
     }
 
     [SerializeField]
-    private NPVoxCoord leftDownBack;
-    public NPVoxCoord LeftDownBack
+    private VoxCoord leftDownBack;
+    public VoxCoord LeftDownBack
     {
         get
         {
@@ -24,25 +24,25 @@ public class NPVoxBox
         }
         set
         {
-            if (value.X > rightUpForward.X)
+            if (value.x > rightUpForward.x)
             {
-                rightUpForward.X = value.X;
+                rightUpForward.x = value.x;
             }
-            if (value.Y > rightUpForward.Y)
+            if (value.y > rightUpForward.y)
             {
-                rightUpForward.Y = value.Y;
+                rightUpForward.y = value.y;
             }
-            if (value.Z > rightUpForward.Z)
+            if (value.z > rightUpForward.z)
             {
-                rightUpForward.Z = value.Z;
+                rightUpForward.z = value.z;
             }
             leftDownBack = value;
         }
     }
 
     [SerializeField]
-    private NPVoxCoord rightUpForward;
-    public NPVoxCoord RightUpForward
+    private VoxCoord rightUpForward;
+    public VoxCoord RightUpForward
     {
         get
         {
@@ -50,326 +50,325 @@ public class NPVoxBox
         }
         set
         {
-            if (value.X < leftDownBack.X)
+            if (value.x < leftDownBack.x)
             {
-                leftDownBack.X = value.X;
+                leftDownBack.x = value.x;
             }
-            if (value.Y < leftDownBack.Y)
+            if (value.y < leftDownBack.y)
             {
-                leftDownBack.Y = value.Y;
+                leftDownBack.y = value.y;
             }
-            if (value.Z < leftDownBack.Z)
+            if (value.z < leftDownBack.z)
             {
-                leftDownBack.Z = value.Z;
+                leftDownBack.z = value.z;
             }
             rightUpForward = value;
         }
     }
 
-    public NPVoxCoord LeftDownForward
+    public VoxCoord LeftDownForward
     {
-        get { return new NPVoxCoord(leftDownBack.X, leftDownBack.Y, rightUpForward.Z); }
+        get { return new VoxCoord(leftDownBack.x, leftDownBack.y, rightUpForward.z); }
         set
         {
-            if (value.X > rightUpForward.X)
+            if (value.x > rightUpForward.x)
             {
-                rightUpForward.X = value.X;
+                rightUpForward.x = value.x;
             }
-            leftDownBack.X = value.X;
+            leftDownBack.x = value.x;
 
-            if (value.Y > rightUpForward.Y)
+            if (value.y > rightUpForward.y)
             {
-                rightUpForward.Y = value.Y;
+                rightUpForward.y = value.y;
             }
-            leftDownBack.Y = value.Y;
+            leftDownBack.y = value.y;
 
-            if (value.Z < leftDownBack.Z)
+            if (value.z < leftDownBack.z)
             {
-                this.leftDownBack.Z = value.Z;
+                this.leftDownBack.z = value.z;
             }
-            rightUpForward.Z = value.Z;
+            rightUpForward.z = value.z;
         }
     }
-    public NPVoxCoord LeftUpBack
+    public VoxCoord LeftUpBack
     {
-        get { return new NPVoxCoord(leftDownBack.X, rightUpForward.Y, leftDownBack.Z); }
+        get { return new VoxCoord(leftDownBack.x, rightUpForward.y, leftDownBack.z); }
         set
         {
-            if (value.X > rightUpForward.X)
+            if (value.x > rightUpForward.x)
             {
-                rightUpForward.X = value.X;
+                rightUpForward.x = value.x;
             }
-            leftDownBack.X = value.X;
+            leftDownBack.x = value.x;
 
-            if (value.Y < leftDownBack.Y)
+            if (value.y < leftDownBack.y)
             {
-                leftDownBack.Y = value.Y;
+                leftDownBack.y = value.y;
             }
-            rightUpForward.Y = value.Y;
+            rightUpForward.y = value.y;
 
-            if (value.Z > rightUpForward.Z)
+            if (value.z > rightUpForward.z)
             {
-                this.rightUpForward.Z = value.Z;
+                this.rightUpForward.z = value.z;
             }
-            leftDownBack.Z = value.Z;
+            leftDownBack.z = value.z;
         }
     }
 
-    public NPVoxCoord LeftUpForward
+    public VoxCoord LeftUpForward
     {
-        get { return new NPVoxCoord(leftDownBack.X, rightUpForward.Y, rightUpForward.Z); }
+        get { return new VoxCoord(leftDownBack.x, rightUpForward.y, rightUpForward.z); }
         set
         {
-            if (value.X > rightUpForward.X)
+            if (value.x > rightUpForward.x)
             {
-                rightUpForward.X = value.X;
+                rightUpForward.x = value.x;
             }
-            leftDownBack.X = value.X;
+            leftDownBack.x = value.x;
 
-            if (value.Y < leftDownBack.Y)
+            if (value.y < leftDownBack.y)
             {
-                leftDownBack.Y = value.Y;
+                leftDownBack.y = value.y;
             }
-            rightUpForward.Y = value.Y;
+            rightUpForward.y = value.y;
 
-            if (value.Z < leftDownBack.Z)
+            if (value.z < leftDownBack.z)
             {
-                this.leftDownBack.Z = value.Z;
+                this.leftDownBack.z = value.z;
             }
-            rightUpForward.Z = value.Z;
+            rightUpForward.z = value.z;
         }
     }
-    public NPVoxCoord RightDownBack
+    public VoxCoord RightDownBack
     {
-        get { return new NPVoxCoord(rightUpForward.X, leftDownBack.Y, leftDownBack.Z); }
+        get { return new VoxCoord(rightUpForward.x, leftDownBack.y, leftDownBack.z); }
         set
         {
-            if (value.X < leftDownBack.X)
+            if (value.x < leftDownBack.x)
             {
-                leftDownBack.X = value.X;
+                leftDownBack.x = value.x;
             }
-            rightUpForward.X = value.X;
+            rightUpForward.x = value.x;
 
-            if (value.Y > rightUpForward.Y)
+            if (value.y > rightUpForward.y)
             {
-                rightUpForward.Y = value.Y;
+                rightUpForward.y = value.y;
             }
-            leftDownBack.Y = value.Y;
+            leftDownBack.y = value.y;
 
-            if (value.Z > rightUpForward.Z)
+            if (value.z > rightUpForward.z)
             {
-                this.rightUpForward.Z = value.Z;
+                this.rightUpForward.z = value.z;
             }
-            leftDownBack.Z = value.Z;
+            leftDownBack.z = value.z;
         }
     }
-    public NPVoxCoord RightDownForward
+    public VoxCoord RightDownForward
     {
-        get { return new NPVoxCoord(rightUpForward.X, leftDownBack.Y, rightUpForward.Z); }
+        get { return new VoxCoord(rightUpForward.x, leftDownBack.y, rightUpForward.z); }
         set
         {
-            if (value.X < leftDownBack.X)
+            if (value.x < leftDownBack.x)
             {
-                leftDownBack.X = value.X;
+                leftDownBack.x = value.x;
             }
-            rightUpForward.X = value.X;
+            rightUpForward.x = value.x;
 
-            if (value.Y > rightUpForward.Y)
+            if (value.y > rightUpForward.y)
             {
-                rightUpForward.Y = value.Y;
+                rightUpForward.y = value.y;
             }
-            leftDownBack.Y = value.Y;
+            leftDownBack.y = value.y;
 
-            if (value.Z < leftDownBack.Z)
+            if (value.z < leftDownBack.z)
             {
-                this.leftDownBack.Z = value.Z;
+                this.leftDownBack.z = value.z;
             }
-            rightUpForward.Z = value.Z;
+            rightUpForward.z = value.z;
         }
     }
-    public NPVoxCoord RightUpBack
+    public VoxCoord RightUpBack
     {
-        get { return new NPVoxCoord(rightUpForward.X, rightUpForward.Y, leftDownBack.Z); }
+        get { return new VoxCoord(rightUpForward.x, rightUpForward.y, leftDownBack.z); }
         set
         {
-            if (value.X < leftDownBack.X)
+            if (value.x < leftDownBack.x)
             {
-                leftDownBack.X = value.X;
+                leftDownBack.x = value.x;
             }
-            rightUpForward.X = value.X;
+            rightUpForward.x = value.x;
 
-            if (value.Y < leftDownBack.Y)
+            if (value.y < leftDownBack.y)
             {
-                leftDownBack.Y = value.Y;
+                leftDownBack.y = value.y;
             }
-            rightUpForward.Y = value.Y;
+            rightUpForward.y = value.y;
 
-            if (value.Z > rightUpForward.Z)
+            if (value.z > rightUpForward.z)
             {
-                this.rightUpForward.Z = value.Z;
+                this.rightUpForward.z = value.z;
             }
-            leftDownBack.Z = value.Z;
+            leftDownBack.z = value.z;
         }
     }
 
 
     public sbyte Left
     {
-        get { return leftDownBack.X; }
+        get { return leftDownBack.x; }
         set
         {
-            if (value > rightUpForward.X)
+            if (value > rightUpForward.x)
             {
-                rightUpForward.X = value;
+                rightUpForward.x = value;
             }
-            leftDownBack.X = value;
+            leftDownBack.x = value;
         }
     }
 
     public sbyte Right
     {
-        get { return rightUpForward.X; }
+        get { return rightUpForward.x; }
         set
         {
-            if (value < leftDownBack.X)
+            if (value < leftDownBack.x)
             {
-                leftDownBack.X = value;
+                leftDownBack.x = value;
             }
-            rightUpForward.X = value;
+            rightUpForward.x = value;
         }
     }
 
     public sbyte Down
     {
-        get { return leftDownBack.Y; }
+        get { return leftDownBack.y; }
         set
         {
-            if (value > rightUpForward.Y)
+            if (value > rightUpForward.y)
             {
-                rightUpForward.Y = value;
+                rightUpForward.y = value;
             }
-            leftDownBack.Y = value;
+            leftDownBack.y = value;
         }
     }
 
     public sbyte Up
     {
-        get { return rightUpForward.Y; }
+        get { return rightUpForward.y; }
         set
         {
-            if (value < leftDownBack.Y)
+            if (value < leftDownBack.y)
             {
-                leftDownBack.Y = value;
+                leftDownBack.y = value;
             }
-            rightUpForward.Y = value;
+            rightUpForward.y = value;
         }
     }
 
     public sbyte Back
     {
-        get { return leftDownBack.Z; }
+        get { return leftDownBack.z; }
         set
         {
-            if (value > rightUpForward.Z)
+            if (value > rightUpForward.z)
             {
-                rightUpForward.Z = value;
+                rightUpForward.z = value;
             }
-            leftDownBack.Z = value;
+            leftDownBack.z = value;
         }
     }
 
     public sbyte Forward
     {
-        get { return rightUpForward.Z; }
+        get { return rightUpForward.z; }
         set
         {
-            if (value < leftDownBack.Z)
+            if (value < leftDownBack.z)
             {
-                leftDownBack.Z = value;
+                leftDownBack.z = value;
             }
-            rightUpForward.Z = value;
+            rightUpForward.z = value;
         }
     }
-    public NPVoxCoord Size
+    public VoxCoord Size
     {
         get
         {
-            return new NPVoxCoord(
-                (sbyte)(rightUpForward.X - leftDownBack.X + 1),
-                (sbyte)(rightUpForward.Y - leftDownBack.Y + 1),
-                (sbyte)(rightUpForward.Z - leftDownBack.Z + 1)
+            return new VoxCoord(
+                (sbyte)(rightUpForward.x - leftDownBack.x + 1),
+                (sbyte)(rightUpForward.y - leftDownBack.y + 1),
+                (sbyte)(rightUpForward.z - leftDownBack.z + 1)
             );
         }
     }
 
-    public NPVoxCoord Center
+    public VoxCoord Center
     {
         get
         {
-            NPVoxCoord size = Size;
-            Assert.IsTrue(size.X % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
-            Assert.IsTrue(size.Y % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
-            Assert.IsTrue(size.Z % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+            VoxCoord size = Size;
+            Assert.IsTrue(size.x % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+            Assert.IsTrue(size.y % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+            Assert.IsTrue(size.z % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
 
-            return leftDownBack + new NPVoxCoord(
-                (sbyte)(size.X / 2),
-                (sbyte)(size.Y / 2),
-                (sbyte)(size.Z / 2)
+            return leftDownBack + new VoxCoord(
+                (sbyte)(size.x / 2),
+                (sbyte)(size.y / 2),
+                (sbyte)(size.z / 2)
             );
         }
     }
-    public NPVoxCoord RoundedCenter
+    public VoxCoord RoundedCenter
     {
         get
         {
-            NPVoxCoord size = Size;
-            return leftDownBack + new NPVoxCoord(
-                (sbyte)(Mathf.Round(((float)size.X - 1f) / 2f)),
-                (sbyte)(Mathf.Round(((float)size.Y - 1f) / 2f)),
-                (sbyte)(Mathf.Round(((float)size.Z - 1f) / 2f))
+            VoxCoord size = Size;
+            return leftDownBack + new VoxCoord(
+                (sbyte)(Mathf.Round(((float)size.x - 1f) / 2f)),
+                (sbyte)(Mathf.Round(((float)size.y - 1f) / 2f)),
+                (sbyte)(Mathf.Round(((float)size.z - 1f) / 2f))
             );
         }
     }
 
-    public NPVoxBox(NPVoxCoord leftDownBack, NPVoxCoord rightUpForward)
+    public NPVoxBox(VoxCoord leftDownBack, VoxCoord rightUpForward)
     {
-//        if ( rightUpForward.X < leftDownBack.X )
-//        {
-//            Debug.Log( "WTf" );
-//        }
-        Assert.IsTrue(rightUpForward.X >= leftDownBack.X, rightUpForward.X + " is < than " + leftDownBack.X);
-        Assert.IsTrue(rightUpForward.Y >= leftDownBack.Y);
-        Assert.IsTrue(rightUpForward.Z >= leftDownBack.Z);
+        //        if ( rightUpForward.X < leftDownBack.X )
+        //        {
+        //            Debug.Log( "WTf" );
+        //        }
+        Assert.IsTrue(rightUpForward.x >= leftDownBack.x, rightUpForward.x + " is < than " + leftDownBack.x);
+        Assert.IsTrue(rightUpForward.y >= leftDownBack.y);
+        Assert.IsTrue(rightUpForward.z >= leftDownBack.z);
         this.leftDownBack = leftDownBack;
         this.rightUpForward = rightUpForward;
     }
 
-    public static NPVoxBox FromCenterSize(NPVoxCoord center, NPVoxCoord size)
+    public static NPVoxBox FromCenterSize(VoxCoord center, VoxCoord size)
     {
-        Assert.IsTrue(size.X % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
-        Assert.IsTrue(size.Y % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
-        Assert.IsTrue(size.Z % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
-        NPVoxCoord SizeHalf = new NPVoxCoord(
-            (sbyte)(size.X / 2),
-            (sbyte)(size.Y / 2),
-            (sbyte)(size.Z / 2)
+        Assert.IsTrue(size.x % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+        Assert.IsTrue(size.y % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+        Assert.IsTrue(size.z % 2 == 1, "Center is not representable in NPVoxCoords for this Box");
+        VoxCoord SizeHalf = new VoxCoord(
+            (sbyte)(size.x / 2),
+            (sbyte)(size.y / 2),
+            (sbyte)(size.z / 2)
         );
         return new NPVoxBox(center - SizeHalf, center + SizeHalf);
     }
 
-    public bool Contains(NPVoxCoord coord)
+    public bool Contains(VoxCoord coord)
     {
         return
-            coord.X >= leftDownBack.X && coord.X <= rightUpForward.X &&
-            coord.Y >= leftDownBack.Y && coord.Y <= rightUpForward.Y &&
-            coord.Z >= leftDownBack.Z && coord.Z <= rightUpForward.Z;
+            coord.x >= leftDownBack.x && coord.x <= rightUpForward.x &&
+            coord.y >= leftDownBack.y && coord.y <= rightUpForward.y &&
+            coord.z >= leftDownBack.z && coord.z <= rightUpForward.z;
     }
 
 
     public override bool Equals(System.Object other)
     {
-        NPVoxBox o = other as NPVoxBox;
-        if (o == null)
+        if (other is not NPVoxBox o)
         {
             return false;
         }
@@ -382,57 +381,57 @@ public class NPVoxBox
     }
 
 
-    public IEnumerable<NPVoxCoord> Enumerate()
+    public IEnumerable<VoxCoord> Enumerate()
     {
-        NPVoxCoord size = Size;
-        for (sbyte x = 0; x < size.X; x++)
+        VoxCoord size = Size;
+        for (sbyte x = 0; x < size.x; x++)
         {
-            for (sbyte y = 0; y < size.Y; y++)
+            for (sbyte y = 0; y < size.y; y++)
             {
-                for (sbyte z = 0; z < size.Z; z++)
+                for (sbyte z = 0; z < size.z; z++)
                 {
-                    yield return new NPVoxCoord((sbyte)(leftDownBack.X + x), (sbyte)(leftDownBack.Y + y), (sbyte)(leftDownBack.Z + z));
+                    yield return new VoxCoord((sbyte)(leftDownBack.x + x), (sbyte)(leftDownBack.y + y), (sbyte)(leftDownBack.z + z));
                 }
             }
         }
     }
 
-    public void EnlargeToInclude(NPVoxCoord coord)
+    public void EnlargeToInclude(VoxCoord coord)
     {
-        if (coord.X < this.Left)
+        if (coord.x < this.Left)
         {
-            this.Left = coord.X;
+            this.Left = coord.x;
         }
-        if (coord.Y < this.Down)
+        if (coord.y < this.Down)
         {
-            this.Down = coord.Y;
+            this.Down = coord.y;
         }
-        if (coord.Z < this.Back)
+        if (coord.z < this.Back)
         {
-            this.Back = coord.Z;
+            this.Back = coord.z;
         }
-        if (coord.X > this.Right)
+        if (coord.x > this.Right)
         {
-            this.Right = coord.X;
+            this.Right = coord.x;
         }
-        if (coord.Y > this.Up)
+        if (coord.y > this.Up)
         {
-            this.Up = coord.Y;
+            this.Up = coord.y;
         }
-        if (coord.Z > this.Forward)
+        if (coord.z > this.Forward)
         {
-            this.Forward = coord.Z;
+            this.Forward = coord.z;
         }
     }
 
-    public void Clamp(NPVoxBox max) 
+    public void Clamp(NPVoxBox max)
     {
-        if(Left < max.Left) Left = max.Left;
-        if(Right > max.Right) Right = max.Right;
-        if(Down < max.Down) Down = max.Down;
-        if(Up > max.Up) Up = max.Up;
-        if(Back < max.Back) Back = max.Back;
-        if(Forward > max.Forward) Forward = max.Forward;
+        if (Left < max.Left) Left = max.Left;
+        if (Right > max.Right) Right = max.Right;
+        if (Down < max.Down) Down = max.Down;
+        if (Up > max.Up) Up = max.Up;
+        if (Back < max.Back) Back = max.Back;
+        if (Forward > max.Forward) Forward = max.Forward;
     }
 
     public NPVoxBox Clone()
@@ -444,24 +443,32 @@ public class NPVoxBox
     {
         get
         {
-            NPVoxCoord size = Size;
+            VoxCoord size = Size;
             return new Vector3(
-                leftDownBack.X + ((float)size.X - 1f) / 2f,
-                leftDownBack.Y + ((float)size.Y - 1f) / 2f,
-                leftDownBack.Z + ((float)size.Z - 1f) / 2f
+                leftDownBack.x + ((float)size.x - 1f) / 2f,
+                leftDownBack.y + ((float)size.y - 1f) / 2f,
+                leftDownBack.z + ((float)size.z - 1f) / 2f
             );
         }
         set
         {
-            NPVoxCoord size = Size;
-            NPVoxCoord newLeftDownBack = new NPVoxCoord(
-                (sbyte)(Mathf.Round(value.x - ((float)size.X - 1f) / 2f)),
-                (sbyte)(Mathf.Round(value.y - ((float)size.Y - 1f) / 2f)),
-                (sbyte)(Mathf.Round(value.z - ((float)size.Z - 1f) / 2f))
+            VoxCoord size = Size;
+            VoxCoord newLeftDownBack = new VoxCoord(
+                (sbyte)(Mathf.Round(value.x - ((float)size.x - 1f) / 2f)),
+                (sbyte)(Mathf.Round(value.y - ((float)size.y - 1f) / 2f)),
+                (sbyte)(Mathf.Round(value.z - ((float)size.z - 1f) / 2f))
             );
-            NPVoxCoord delta = newLeftDownBack - leftDownBack;
+            VoxCoord delta = newLeftDownBack - leftDownBack;
             leftDownBack = newLeftDownBack;
             rightUpForward = rightUpForward + delta;
         }
+    }
+
+    public static NPVoxBox Union(NPVoxBox x, NPVoxBox y)
+    {
+        NPVoxBox box = new NPVoxBox(x.leftDownBack, x.rightUpForward);
+        box.EnlargeToInclude(y.LeftDownBack);
+        box.EnlargeToInclude(y.RightUpForward);
+        return box;
     }
 }

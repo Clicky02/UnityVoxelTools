@@ -25,7 +25,7 @@ public class NPVoxHotkey
         {
             return false;
         }
-        bool modifiersOk = (cmd == (e.command || e.control)) && (e.shift  == shift) && (e.alt == alt);
+        bool modifiersOk = (cmd == (e.command || e.control)) && (e.shift == shift) && (e.alt == alt);
         return modifiersOk && e.isKey && e.type == EventType.KeyDown && e.keyCode == keyCode;
     }
 
@@ -53,7 +53,7 @@ public class NPVoxHotkey
 
 public class NPVoxGUILayout
 {
-    
+
     public static T HotkeyToggleBar<T>(string[] labels, T[] values, KeyCode key, T selectedValue, bool noFocusCheck = false)
     {
         int selectedIndex = -1;
@@ -71,12 +71,12 @@ public class NPVoxGUILayout
         {
             return values[newIndex];
         }
-        
-        if(key == KeyCode.None)
+
+        if (key == KeyCode.None)
         {
             return selectedValue;
         }
-        
+
         Event e = Event.current;
         if (e.isKey && e.type == EventType.KeyDown && e.keyCode == key && focusOK)
         {
@@ -206,7 +206,7 @@ public class NPVoxGUILayout
             return previousValue;
         }
 
-        NPVoxModel inputModel = modelFactory.GetProduct();
+        VoxModel inputModel = modelFactory.GetProduct();
         string[] socketNames = inputModel.SocketNames;
 
         if (inputModel)
