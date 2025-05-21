@@ -111,11 +111,11 @@ public class NPVoxNormalProcessorPreview_UserOverride : NPVoxNormalProcessorPrev
 
             int labelWidth = 65, columnWidth = 150, columnSpace = -5;
             GUILayout.Label("Last Selected:", noFill);
-            NPipeGUILayout.TableRow("Coord:", labelWidth, columnSpace, new NPipeGUILayout.TableColumn(selectedCoord, columnWidth));
-            NPipeGUILayout.TableRow("v-Index:", labelWidth, columnSpace, new NPipeGUILayout.TableColumn(selectedVIndex, columnWidth));
-            NPipeGUILayout.TableRow("Normal X:", labelWidth, columnSpace, new NPipeGUILayout.TableColumn(selectedNormalX, columnWidth));
-            NPipeGUILayout.TableRow("Normal Y:", labelWidth, columnSpace, new NPipeGUILayout.TableColumn(selectedNormalY, columnWidth));
-            NPipeGUILayout.TableRow("Normal Z:", labelWidth, columnSpace, new NPipeGUILayout.TableColumn(selectedNormalZ, columnWidth));
+            PipeGUILayout.TableRow("Coord:", labelWidth, columnSpace, new PipeGUILayout.TableColumn(selectedCoord, columnWidth));
+            PipeGUILayout.TableRow("v-Index:", labelWidth, columnSpace, new PipeGUILayout.TableColumn(selectedVIndex, columnWidth));
+            PipeGUILayout.TableRow("Normal X:", labelWidth, columnSpace, new PipeGUILayout.TableColumn(selectedNormalX, columnWidth));
+            PipeGUILayout.TableRow("Normal Y:", labelWidth, columnSpace, new PipeGUILayout.TableColumn(selectedNormalY, columnWidth));
+            PipeGUILayout.TableRow("Normal Z:", labelWidth, columnSpace, new PipeGUILayout.TableColumn(selectedNormalZ, columnWidth));
             GUILayout.Space(12.0f);
 
             // General selection related controls
@@ -304,13 +304,13 @@ public class NPVoxNormalProcessorPreview_UserOverride : NPVoxNormalProcessorPrev
                     Vector3 voxPosition = new Vector3(vox.voxelCenter.x, vox.voxelCenter.y, vox.voxelCenter.z);
                     if (m_previewHighlightOverrides && processor.m_overrideNormalsRT.ContainsKey(vox.voxCoord))
                     {
-                        NPipeGL.DrawParallelepiped(voxPosition - voxExtent, v1, v2, v3, new Color(0.5f, 0.0f, 0.0f));
+                        PipeGL.DrawParallelepiped(voxPosition - voxExtent, v1, v2, v3, new Color(0.5f, 0.0f, 0.0f));
                     }
 
                     sbyte selection = GetSelection(vox.voxCoord);
                     if (selection != UNSELECTED)
                     {
-                        NPipeGL.DrawParallelepiped(voxPosition - voxExtent, v1, v2, v3, selection == SELECTED_TARGET ? Color.red : Color.green);
+                        PipeGL.DrawParallelepiped(voxPosition - voxExtent, v1, v2, v3, selection == SELECTED_TARGET ? Color.red : Color.green);
                     }
 
                     if (vox.voxCoord.Equals(m_lastSelected))

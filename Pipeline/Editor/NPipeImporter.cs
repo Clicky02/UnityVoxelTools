@@ -11,12 +11,12 @@ public class NPipeImporter : AssetPostprocessor
 {
     struct NPipeImportFile
     {
-        public NPipeContainer Container;
+        public PipeContainer Container;
 
         /// <summary>
         /// ordered list of importables
         /// </summary>
-        public NPipeIImportable[] importables;
+        public IPipeImportable[] importables;
 
         /// <summary>
         /// path for this file
@@ -30,15 +30,15 @@ public class NPipeImporter : AssetPostprocessor
         #region IComparer implementation
         public int Compare(NPipeImportFile x, NPipeImportFile y)
         {
-            foreach (NPipeIImportable xImportable in x.importables)
+            foreach (IPipeImportable xImportable in x.importables)
             {
-                foreach (NPipeIImportable yImportable in y.importables)
+                foreach (IPipeImportable yImportable in y.importables)
                 {
-                    if (NPipelineUtils.IsPrevious(xImportable, yImportable, true))
+                    if (Utils.IsPrevious(xImportable, yImportable, true))
                     {
                         return 1;
                     }
-                    if (NPipelineUtils.IsPrevious(yImportable, xImportable, true))
+                    if (Utils.IsPrevious(yImportable, xImportable, true))
                     {
                         return -1;
                     }
@@ -70,14 +70,14 @@ public class NPipeImporter : AssetPostprocessor
             if (extension == ".asset")
             {
                 Object[] allAssets = AssetDatabase.LoadAllAssetsAtPath(asset);
-                NPipeContainer container = NPipelineUtils.GetContainer(allAssets);
+                PipeContainer container = Utils.GetContainer(allAssets);
                 if (container)
                 {
                     container.OnImport();
                 }
 
-                NPipeIImportable[] importables = NPipelineUtils.GetImportables(allAssets);
-                NPipeIImportable[] ordered = NPipelineUtils.OrderForImport( importables );
+                IPipeImportable[] importables = Utils.GetImportables(allAssets);
+                IPipeImportable[] ordered = Utils.OrderForImport(importables);
 
                 if (ordered.Length > 0)
                 {
@@ -114,7 +114,7 @@ public class NPipeImporter : AssetPostprocessor
 
             foreach (NPipeImportFile importFile in listOfImportableAssets)
             {
-                foreach (NPipeIImportable importable in importFile.importables)
+                foreach (IPipeImportable importable in importFile.importables)
                 {
                     Assert.IsNotNull(importable);
                     if (((UnityEngine.Object)importable))
@@ -124,16 +124,16 @@ public class NPipeImporter : AssetPostprocessor
                             importable.Import();
                             importedSomething = true;
                         }
-                        catch( NPipeException e )
+                        catch (PipeException e)
                         {
-                            Debug.LogWarning("Got Exception " + e.Message +" importing a pipe in " + importFile.Path + " (THIS IS ONLY A PROBLEM IF THERE IS NO SUCCESSFUL REPORT FOLLOWING) - ELSE RESTART UNITY");
+                            Debug.LogWarning("Got Exception " + e.Message + " importing a pipe in " + importFile.Path + " (THIS IS ONLY A PROBLEM IF THERE IS NO SUCCESSFUL REPORT FOLLOWING) - ELSE RESTART UNITY");
 
-                            NPipeImportFile file = RetryFiles.ContainsKey(importFile.Path) ? RetryFiles[importFile.Path] :  new NPipeImportFile();
+                            NPipeImportFile file = RetryFiles.ContainsKey(importFile.Path) ? RetryFiles[importFile.Path] : new NPipeImportFile();
                             file.Path = importFile.Path;
                             file.Container = importFile.Container;
                             if (file.importables == null)
                             {
-                                file.importables = new NPipeIImportable[0];
+                                file.importables = new IPipeImportable[0];
                             }
                             ArrayUtility.Add(ref file.importables, importable);
                             RetryFiles[file.Path] = file;
@@ -143,8 +143,8 @@ public class NPipeImporter : AssetPostprocessor
             }
 
             AssetDatabase.SaveAssets();
-//            AssetDatabase.Refresh();
+            //            AssetDatabase.Refresh();
         }
     }
-//    }
+    //    }
 }

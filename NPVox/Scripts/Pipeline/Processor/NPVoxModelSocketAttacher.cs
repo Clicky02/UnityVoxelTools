@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[NPipeAppendableAttribute("Socket Attacher", typeof(NPVoxIModelFactory), true, true)]
+[PipeAppendableAttribute("Socket Attacher", typeof(NPVoxIModelFactory), true, true)]
 public class NPVoxModelSocketAttacher : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
     public NPVoxSocket[] AddSockets = new NPVoxSocket[] { };

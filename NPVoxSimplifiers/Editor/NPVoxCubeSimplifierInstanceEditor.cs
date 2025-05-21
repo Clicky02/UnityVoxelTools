@@ -53,12 +53,12 @@ public class NPVoxCubeSimplifierInstanceEditor : Editor
 
         if (GUILayout.Button("Select Pipe Container (Edit Import Settings)"))
         {
-            Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.CubeSimplifier), typeof(NPipeContainer)) };
+            Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.CubeSimplifier), typeof(PipeContainer)) };
         }
 
         if (GUILayout.Button("Invalidate Pipe Container Deep "))
         {
-            NPipelineUtils.InvalidateAndReimportAllDeep(AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.CubeSimplifier), typeof(NPipeContainer)));
+            Utils.InvalidateAndReimportAllDeep(AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.CubeSimplifier), typeof(PipeContainer)));
         }
     }
 

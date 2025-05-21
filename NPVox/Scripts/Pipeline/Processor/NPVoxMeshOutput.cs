@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[NPipeAppendableAttribute("Mesh Output", typeof(NPVoxIModelFactory), true, true)]
-public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxObjectData>, NPVoxIMeshFactory, NPipeIInstantiable
+[PipeAppendableAttribute("Mesh Output", typeof(NPVoxIModelFactory), true, true)]
+public class NPVoxMeshOutput : NPVoxCompositeProcessorBase<NPVoxIModelFactory, NPVoxObjectData>, NPVoxIMeshFactory, IPipeInstantiable
 {
     public Vector3 VoxelSize = Vector3.one * 0.125f;
     public Vector3 NormalVariance = Vector3.zero;

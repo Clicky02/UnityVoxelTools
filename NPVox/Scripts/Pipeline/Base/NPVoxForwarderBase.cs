@@ -1,6 +1,6 @@
 using UnityEngine;
 
-abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableObject, NPipeIImportable, NPipeIComposite, NPipeIEditable where PRODUCT : Object where SOURCE_FACTORY : class, NPipeIImportable
+abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableObject, IPipeImportable, IPipeComposite, IPipeEditable where PRODUCT : Object where SOURCE_FACTORY : class, IPipeImportable
 {
     [SerializeField]
     private string InstanceName = "";
@@ -8,27 +8,27 @@ abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableOb
     [SerializeField, HideInInspector]
     private UnityEngine.Object input;
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private double lastInvalidatedAt = 0;
-    #endif
+#endif
 
-    public NPipeIImportable[] GetAllInputs()
+    public IPipeImportable[] GetAllInputs()
     {
         if (Input != null)
         {
-            return new NPipeIImportable[] { (NPipeIImportable)Input };
+            return new IPipeImportable[] { (IPipeImportable)Input };
         }
         else
         {
-            return new NPipeIImportable[] { };
+            return new IPipeImportable[] { };
         }
     }
 
-    public NPipeIImportable Input
+    public IPipeImportable Input
     {
         get
         {
-            return input as NPipeIImportable;
+            return input as IPipeImportable;
         }
         set
         {
@@ -56,9 +56,9 @@ abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableOb
             }
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         lastInvalidatedAt = UnityEditor.EditorApplication.timeSinceStartup;
-        #endif
+#endif
     }
 
     public virtual void Destroy()
@@ -95,22 +95,22 @@ abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableOb
         return copy;
     }
 
-    public virtual void IncludeSubAssets(string path) {}
+    public virtual void IncludeSubAssets(string path) { }
 
 #if UNITY_EDITOR
-    virtual public bool DrawInspector(NPipeEditFlags flags)
+    virtual public bool DrawInspector(EditFlags flags)
     {
         UnityEditor.Editor editor = UnityEditor.Editor.CreateEditor(this);
         bool changed = editor.DrawDefaultInspector();
-        if ((flags & NPipeEditFlags.INPUT) == NPipeEditFlags.INPUT)
+        if ((flags & EditFlags.INPUT) == EditFlags.INPUT)
         {
-            SOURCE_FACTORY newSource = NPipelineUtils.DrawSourceSelector<SOURCE_FACTORY>("Input", input as SOURCE_FACTORY);
-            if (newSource as  NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> == this)
+            SOURCE_FACTORY newSource = Utils.DrawSourceSelector<SOURCE_FACTORY>("Input", input as SOURCE_FACTORY);
+            if (newSource as NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> == this)
             {
                 return false;
             }
             changed = newSource != Input || changed;
-            Input = (NPipeIImportable)newSource;
+            Input = (IPipeImportable)newSource;
         }
 
         // if((flags & NPVoxEditFlags.TOOLS) == NPVoxEditFlags.TOOLS)
@@ -124,7 +124,7 @@ abstract public class NPVoxForwarderBase<SOURCE_FACTORY, PRODUCT> : ScriptableOb
         return changed;
     }
 
-    virtual public bool DrawMultiInstanceEditor(NPipeEditFlags flags, UnityEngine.Object[] objects)
+    virtual public bool DrawMultiInstanceEditor(EditFlags flags, UnityEngine.Object[] objects)
     {
         UnityEditor.Editor editor = UnityEditor.Editor.CreateEditor(objects);
         bool changed = editor.DrawDefaultInspector();

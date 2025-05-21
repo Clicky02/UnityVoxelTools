@@ -23,14 +23,14 @@ public class NPVoxImporter : AssetPostprocessor
             string extension = Path.GetExtension(asset);
             if (extension == ".vox")
             {
-                 if( ImportVoxModel(asset) ) 
-                 {
-                     importedSomething = true;
-                 }
+                if (ImportVoxModel(asset))
+                {
+                    importedSomething = true;
+                }
             }
         }
 
-        if( importedSomething )
+        if (importedSomething)
         {
             // AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -43,7 +43,7 @@ public class NPVoxImporter : AssetPostprocessor
         string basename = Path.GetDirectoryName(asset);
         EnsureDirectoriesExist(basename);
         string pipelinePath = Path.Combine(Path.Combine(basename, "Pipeline/"), filename + ".asset");
-        NPipeContainer pipeContainer = NPipelineUtils.GetContainerForVoxPath(asset);
+        PipeContainer pipeContainer = Utils.GetContainerForVoxPath(asset);
 
         if (!pipeContainer)
         {
@@ -51,13 +51,13 @@ public class NPVoxImporter : AssetPostprocessor
             {
                 // We don't need this anymore, as assets are reimported by the NPipeImporter anyway
                 // AssetDatabase.ImportAsset(asset, ImportAssetOptions.Default);
-//                Debug.Log("Did not create Pipeline for asset '" + asset + "' due to pipeline not yet ready (no problem as will get imported by the NPipeContainer anyway)");
+                //                Debug.Log("Did not create Pipeline for asset '" + asset + "' due to pipeline not yet ready (no problem as will get imported by the NPipeContainer anyway)");
                 return false;
             }
 
             Debug.Log("Creating Pipeline for Voxmodel: " + asset);
-            
-            NPipeContainer template;
+
+            PipeContainer template;
             bool unavailable;
             NPVoxUtils.LoadTemplateMetadata(out template, out unavailable);
             if (template == null)
@@ -71,22 +71,22 @@ public class NPVoxImporter : AssetPostprocessor
                 }
                 return false;
             }
-            
-            pipeContainer = NPipelineUtils.ClonePipeContainer(template, pipelinePath);
+
+            pipeContainer = Utils.ClonePipeContainer(template, pipelinePath);
         }
 
-        NPipeIImportable[] importables = NPipelineUtils.GetImportables(pipeContainer);
+        IPipeImportable[] importables = Utils.GetImportables(pipeContainer);
         // NPipeIImportable[] outputPipes = NPipelineUtils.FindOutputPipes(importables);
 
-        foreach (NPipeIImportable importable in importables)
+        foreach (IPipeImportable importable in importables)
         {
-            if(importable is NPVoxMagickaSource)
+            if (importable is NPVoxMagickaSource)
             {
                 ((NPVoxMagickaSource)importable).VoxModelUUID = AssetDatabase.AssetPathToGUID(asset);
             }
-            
+
             importable.Invalidate();
-            EditorUtility.SetDirty(importable as UnityEngine.Object );
+            EditorUtility.SetDirty(importable as UnityEngine.Object);
         }
 
         AssetDatabase.SaveAssets();

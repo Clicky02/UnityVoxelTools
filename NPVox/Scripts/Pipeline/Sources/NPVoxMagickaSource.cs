@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using System.IO;
 
-[NPipeStartingAttribute("Magicka Source", true)]
+[PipeStartingAttribute("Magicka Source", true)]
 public class NPVoxMagickaSource : NPVoxProcessorBase<VoxModel>, NPVoxIModelFactory
 {
     [HideInInspector]
@@ -47,7 +47,7 @@ public class NPVoxMagickaSource : NPVoxProcessorBase<VoxModel>, NPVoxIModelFacto
     }
 
 #if UNITY_EDITOR
-    public override bool DrawInspector(NPipeEditFlags flags)
+    public override bool DrawInspector(EditFlags flags)
     {
         bool changed = base.DrawInspector(flags);
         string voxSourcePath = AssetDatabase.GUIDToAssetPath(VoxModelUUID);

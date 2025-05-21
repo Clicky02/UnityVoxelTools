@@ -1,5 +1,5 @@
 using UnityEngine;
-public interface NPVoxIMeshFactory : NPipeIImportable
+public interface NPVoxIMeshFactory : IPipeImportable
 {
     NPVoxObjectData GetProduct();
 }

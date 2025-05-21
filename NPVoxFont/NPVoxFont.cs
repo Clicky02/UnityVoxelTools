@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPVoxFont : ScriptableObject, NPipeIImportable
+public class NPVoxFont : ScriptableObject, IPipeImportable
 {
     [System.Serializable]
     public struct Character
@@ -86,10 +86,10 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
     [UnityEditor.MenuItem("Assets/Create/NPVox/Font", false)]
     static void CreateNPVoxFont()
     {
-        var path = NPipelineUtils.GetCreateScriptableObjectAssetPath<NPVoxFont>();
+        var path = Utils.GetCreateScriptableObjectAssetPath<NPVoxFont>();
         if (path.Length != 0)
         {
-            NPVoxFont npVoxFont = (NPVoxFont)NPipeContainer.CreateInstance(typeof(NPVoxFont));
+            NPVoxFont npVoxFont = (NPVoxFont)PipeContainer.CreateInstance(typeof(NPVoxFont));
             UnityEditor.AssetDatabase.CreateAsset(npVoxFont, path);
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.Selection.objects = new Object[] { npVoxFont };
@@ -106,7 +106,7 @@ public class NPVoxFont : ScriptableObject, NPipeIImportable
         {
             Character character = Characters[i];
             Object[] allAssets = UnityEditor.AssetDatabase.LoadAllAssetsAtPath(FontFolder + "/" + i + ".asset");
-            NPVoxCubeSimplifier[] simplifier = NPipelineUtils.GetByType<NPVoxCubeSimplifier>(allAssets);
+            NPVoxCubeSimplifier[] simplifier = Utils.GetByType<NPVoxCubeSimplifier>(allAssets);
             if (simplifier.Length == 1)
             {
                 //                Debug.Log("found character: " + simplifier[0]);

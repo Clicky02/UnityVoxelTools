@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface NPVoxITextureFactory : NPipeIImportable 
+public interface NPVoxITextureFactory : IPipeImportable
 {
     Texture2D GetProduct();
 }

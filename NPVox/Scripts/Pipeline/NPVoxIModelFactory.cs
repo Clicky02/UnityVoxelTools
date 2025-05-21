@@ -1,5 +1,5 @@
 
-public interface NPVoxIModelFactory : NPipeIImportable
+public interface NPVoxIModelFactory : IPipeImportable
 {
     VoxModel GetProduct();
 }

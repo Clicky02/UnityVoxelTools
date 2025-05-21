@@ -1,6 +1,6 @@
 using UnityEngine;
 
-abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImportable, NPipeIEditable where PRODUCT : UnityEngine.Object
+abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, IPipeImportable, IPipeEditable where PRODUCT : UnityEngine.Object
 {
     [SerializeField, HideInInspector]
     private NPipeStorageMode storageMode = NPipeStorageMode.MEMORY;
@@ -51,10 +51,10 @@ abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImpo
     {
         if (includeInputs)
         {
-            NPipeIImportable[] sources = GetAllInputs();
+            IPipeImportable[] sources = GetAllInputs();
             if (sources != null)
             {
-                foreach (NPipeIImportable importable in sources)
+                foreach (IPipeImportable importable in sources)
                 {
                     importable.Invalidate(true);
                 }
@@ -62,9 +62,9 @@ abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImpo
         }
         isValid = false;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         lastInvalidatedAt = UnityEditor.EditorApplication.timeSinceStartup;
-        #endif
+#endif
     }
 
     virtual public void Destroy()
@@ -141,7 +141,7 @@ abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImpo
         return this.InstanceName;
     }
 
-    public virtual NPipeIImportable[] GetAllInputs()
+    public virtual IPipeImportable[] GetAllInputs()
     {
         return null;
     }
@@ -173,19 +173,19 @@ abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImpo
         return copy;
     }
 
-    virtual public void IncludeSubAssets(string path) {}
+    virtual public void IncludeSubAssets(string path) { }
 
 #if UNITY_EDITOR
-    virtual public bool DrawInspector(NPipeEditFlags flags)
+    virtual public bool DrawInspector(EditFlags flags)
     {
         UnityEditor.Editor editor = UnityEditor.Editor.CreateEditor(this);
         bool changed = editor.DrawDefaultInspector();
 
-        if ((flags & NPipeEditFlags.STORAGE_MODE) == NPipeEditFlags.STORAGE_MODE)
+        if ((flags & EditFlags.STORAGE_MODE) == EditFlags.STORAGE_MODE)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Storage Mode");
-            NPipeStorageMode newStorageMode = (NPipeStorageMode) GUILayout.Toolbar((int)storageMode, new string[]{ "RAM", "RESOURCE_CACHE", "ATTACHED" });
+            NPipeStorageMode newStorageMode = (NPipeStorageMode)GUILayout.Toolbar((int)storageMode, new string[] { "RAM", "RESOURCE_CACHE", "ATTACHED" });
 
             if (newStorageMode != storageMode)
             {
@@ -199,18 +199,18 @@ abstract public class NPVoxProcessorBase<PRODUCT> : ScriptableObject, NPipeIImpo
         return changed;
     }
 
-    virtual public bool DrawMultiInstanceEditor(NPipeEditFlags flags, UnityEngine.Object[] objects)
+    virtual public bool DrawMultiInstanceEditor(EditFlags flags, UnityEngine.Object[] objects)
     {
         UnityEditor.Editor editor = UnityEditor.Editor.CreateEditor(objects);
         bool changed = editor.DrawDefaultInspector();
 
-        if ((flags & NPipeEditFlags.STORAGE_MODE) == NPipeEditFlags.STORAGE_MODE)
+        if ((flags & EditFlags.STORAGE_MODE) == EditFlags.STORAGE_MODE)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Storage Mode");
-            NPipeStorageMode newStorageMode = (NPipeStorageMode) GUILayout.Toolbar((int)storageMode, new string[]{ "RAM", "RESOURCE_CACHE", "ATTACHED" });
+            NPipeStorageMode newStorageMode = (NPipeStorageMode)GUILayout.Toolbar((int)storageMode, new string[] { "RAM", "RESOURCE_CACHE", "ATTACHED" });
 
-            foreach(UnityEngine.Object o in objects)
+            foreach (UnityEngine.Object o in objects)
             {
                 if (((NPVoxProcessorBase<PRODUCT>)o).storageMode != storageMode)
                 {

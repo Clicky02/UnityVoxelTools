@@ -47,11 +47,11 @@ public class NPVoxMenuItems : ScriptableObject
         UnityEngine.Object[] objects = Selection.objects;
         for (int i = 0; i < objects.Length; i++)
         {
-            NPipeContainer o = objects[i] as NPipeContainer;
+            PipeContainer o = objects[i] as PipeContainer;
             if (o)
             {
-                NPipeIImportable[] outputPipes = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetImportables(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(o))));
-                foreach (NPipeIImportable imp in outputPipes)
+                IPipeImportable[] outputPipes = Utils.FindOutputPipes(Utils.GetImportables(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(o))));
+                foreach (IPipeImportable imp in outputPipes)
                 {
                     if (imp is NPVoxMeshOutput)
                     {
@@ -73,8 +73,8 @@ public class NPVoxMenuItems : ScriptableObject
     {
         foreach (UnityEngine.Object target in Selection.objects)
         {
-            NPipeIImportable[] allImportables = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetByType<NPipeIImportable>(target));
-            NPipelineUtils.InvalidateAll(allImportables);
+            IPipeImportable[] allImportables = Utils.FindOutputPipes(Utils.GetByType<IPipeImportable>(target));
+            Utils.InvalidateAll(allImportables);
             EditorUtility.SetDirty(target as UnityEngine.Object);
         }
         AssetDatabase.SaveAssets();
@@ -85,8 +85,8 @@ public class NPVoxMenuItems : ScriptableObject
     {
         foreach (UnityEngine.Object target in Selection.objects)
         {
-            NPipeIImportable[] allImportables = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetByType<NPipeIImportable>(target));
-            NPipelineUtils.InvalidateAll(allImportables, true);
+            IPipeImportable[] allImportables = Utils.FindOutputPipes(Utils.GetByType<IPipeImportable>(target));
+            Utils.InvalidateAll(allImportables, true);
             EditorUtility.SetDirty(target as UnityEngine.Object);
         }
         AssetDatabase.SaveAssets();
@@ -124,11 +124,11 @@ public class NPVoxMenuItems : ScriptableObject
         UnityEngine.Object[] objects = Selection.objects;
         for (int i = 0; i < objects.Length; i++)
         {
-            NPipeContainer o = objects[i] as NPipeContainer;
+            PipeContainer o = objects[i] as PipeContainer;
             if (o)
             {
-                NPipeIImportable[] outputPipes = NPipelineUtils.FindOutputPipes(NPipelineUtils.GetImportables(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(o))));
-                foreach (NPipeIImportable imp in outputPipes)
+                IPipeImportable[] outputPipes = Utils.FindOutputPipes(Utils.GetImportables(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(o))));
+                foreach (IPipeImportable imp in outputPipes)
                 {
                     if (imp is NPVoxMeshOutput)
                     {
@@ -148,10 +148,10 @@ public class NPVoxMenuItems : ScriptableObject
     [MenuItem("Assets/Create/NPVox/Pipe Container", false)]
     static void CreatePipeContainer()
     {
-        var path = NPipelineUtils.GetCreateScriptableObjectAssetPath<NPipeContainer>();
+        var path = Utils.GetCreateScriptableObjectAssetPath<PipeContainer>();
         if (path.Length != 0)
         {
-            Selection.objects = new Object[] { NPipelineUtils.CreatePipeContainer<NPipeContainer>(path) };
+            Selection.objects = new Object[] { Utils.CreatePipeContainer<PipeContainer>(path) };
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[NPipeAppendable("Model Flipper", typeof(NPVoxIModelFactory), true, true)]
+[PipeAppendable("Model Flipper", typeof(NPVoxIModelFactory), true, true)]
 public class NPVoxModelFlipper : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
     public VoxCoord XAxis = new VoxCoord(1, 0, 0);

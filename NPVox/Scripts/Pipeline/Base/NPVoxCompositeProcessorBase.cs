@@ -1,27 +1,27 @@
 using UnityEngine;
 
-abstract public class NPVoxCompositeProcessorBase<SOURCE_FACTORY, PRODUCT> : NPVoxProcessorBase<PRODUCT>, NPipeIComposite where PRODUCT : Object where SOURCE_FACTORY : class, NPipeIImportable
+abstract public class NPVoxCompositeProcessorBase<SOURCE_FACTORY, PRODUCT> : NPVoxProcessorBase<PRODUCT>, IPipeComposite where PRODUCT : Object where SOURCE_FACTORY : class, IPipeImportable
 {
     [SerializeField, HideInInspector]
     private UnityEngine.Object input;
 
-    override public NPipeIImportable[] GetAllInputs()
+    override public IPipeImportable[] GetAllInputs()
     {
         if (Input != null)
         {
-            return new NPipeIImportable[] { (NPipeIImportable)Input };
+            return new IPipeImportable[] { (IPipeImportable)Input };
         }
         else
         {
-            return new NPipeIImportable[] { };
+            return new IPipeImportable[] { };
         }
     }
 
-    virtual public NPipeIImportable Input
+    virtual public IPipeImportable Input
     {
         get
         {
-            return input as NPipeIImportable;
+            return input as IPipeImportable;
         }
         set
         {
@@ -30,48 +30,48 @@ abstract public class NPVoxCompositeProcessorBase<SOURCE_FACTORY, PRODUCT> : NPV
     }
 
 #if UNITY_EDITOR
-    override public bool DrawInspector(NPipeEditFlags flags)
+    override public bool DrawInspector(EditFlags flags)
     {
         bool changed = base.DrawInspector(flags);
 
-        if ((flags & NPipeEditFlags.INPUT) == NPipeEditFlags.INPUT)
+        if ((flags & EditFlags.INPUT) == EditFlags.INPUT)
         {
-            SOURCE_FACTORY newSource = NPipelineUtils.DrawSourceSelector<SOURCE_FACTORY>("Input", input as SOURCE_FACTORY);
+            SOURCE_FACTORY newSource = Utils.DrawSourceSelector<SOURCE_FACTORY>("Input", input as SOURCE_FACTORY);
             if (newSource as NPVoxCompositeProcessorBase<SOURCE_FACTORY, PRODUCT> == this)
             {
                 return false;
             }
             changed = newSource != Input || changed;
-            Input = (NPipeIImportable)newSource;
+            Input = (IPipeImportable)newSource;
         }
 
-        if ((flags & NPipeEditFlags.TOOLS) == NPipeEditFlags.TOOLS)
+        if ((flags & EditFlags.TOOLS) == EditFlags.TOOLS)
         {
             if (GUILayout.Button("Invalidate & Reimport Deep"))
             {
-                NPipelineUtils.InvalidateAndReimportDeep(this);
+                Utils.InvalidateAndReimportDeep(this);
             }
         }
 
         return changed;
     }
 
-    override public bool DrawMultiInstanceEditor(NPipeEditFlags flags, UnityEngine.Object[] objects)
+    override public bool DrawMultiInstanceEditor(EditFlags flags, UnityEngine.Object[] objects)
     {
         bool changed = base.DrawMultiInstanceEditor(flags, objects);
 
-        if ((flags & NPipeEditFlags.INPUT) == NPipeEditFlags.INPUT)
+        if ((flags & EditFlags.INPUT) == EditFlags.INPUT)
         {
             // input not supported when editing multiple instances
         }
 
-        if ((flags & NPipeEditFlags.TOOLS) == NPipeEditFlags.TOOLS)
+        if ((flags & EditFlags.TOOLS) == EditFlags.TOOLS)
         {
             if (GUILayout.Button("Invalidate & Reimport Deep"))
             {
                 foreach (UnityEngine.Object o in objects)
                 {
-                    NPipelineUtils.InvalidateAndReimportDeep(o as NPipeIImportable);
+                    Utils.InvalidateAndReimportDeep(o as IPipeImportable);
                 }
             }
         }

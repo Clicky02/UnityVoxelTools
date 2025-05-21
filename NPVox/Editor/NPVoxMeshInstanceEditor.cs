@@ -56,7 +56,7 @@ public class NPVoxMeshInstanceEditor : Editor
             }
         }
 
-        NPVoxCubeSimplifier[] simplifiers = NPipelineUtils.FindNextPipeOfType<NPVoxCubeSimplifier>(NPipelineUtils.GetImportables(AssetDatabase.GetAssetPath(instance.MeshFactory as UnityEngine.Object)), instance.MeshFactory);
+        NPVoxCubeSimplifier[] simplifiers = Utils.FindNextPipeOfType<NPVoxCubeSimplifier>(Utils.GetImportables(AssetDatabase.GetAssetPath(instance.MeshFactory as UnityEngine.Object)), instance.MeshFactory);
 
         if (simplifiers.Length > 0)
         {
@@ -74,7 +74,7 @@ public class NPVoxMeshInstanceEditor : Editor
             if (GUILayout.Button("Create Cube Simplifier"))
             {
                 string assetPath = AssetDatabase.GetAssetPath(instance.MeshFactory as UnityEngine.Object);
-                NPVoxCubeSimplifier simplifier = (NPVoxCubeSimplifier)NPipelineUtils.CreateAttachedPipe(assetPath, typeof(NPVoxCubeSimplifier), instance.MeshFactory);
+                NPVoxCubeSimplifier simplifier = (NPVoxCubeSimplifier)Utils.CreateAttachedPipe(assetPath, typeof(NPVoxCubeSimplifier), instance.MeshFactory);
                 simplifier.TextureAtlas = (NPVoxTextureAtlas)UnityEditor.AssetDatabase.LoadAssetAtPath(UnityEditor.AssetDatabase.GUIDToAssetPath("b3ed00785c29642baae5806625c1d3c1"), typeof(NPVoxTextureAtlas));
                 simplifier.SourceMaterial = instance.GetComponent<MeshRenderer>().sharedMaterial;
                 AssetDatabase.SaveAssets();
@@ -83,13 +83,13 @@ public class NPVoxMeshInstanceEditor : Editor
 
         if (GUILayout.Button("Select Pipe Container (Edit Import Settings)"))
         {
-            Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.meshFactory), typeof(NPipeContainer)) };
+            Selection.objects = new Object[] { AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.meshFactory), typeof(PipeContainer)) };
         }
 
 
         if (GUILayout.Button("Invalidate Pipe Container Deep "))
         {
-            NPipelineUtils.InvalidateAndReimportAllDeep(AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.meshFactory), typeof(NPipeContainer)));
+            Utils.InvalidateAndReimportAllDeep(AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(instance.meshFactory), typeof(PipeContainer)));
         }
     }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[NPipeAppendableAttribute("Model Slicer", typeof(NPVoxIModelFactory), true, true)]
+[PipeAppendableAttribute("Model Slicer", typeof(NPVoxIModelFactory), true, true)]
 public class NPVoxModelSlicer : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
     public NPVoxBox slice;

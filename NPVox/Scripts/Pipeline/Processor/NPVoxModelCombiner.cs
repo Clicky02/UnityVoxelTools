@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[NPipeAppendableAttribute("Model Combiner", typeof(NPVoxIModelFactory), false, true)]
+[PipeAppendableAttribute("Model Combiner", typeof(NPVoxIModelFactory), false, true)]
 public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory, VoxModel>, NPVoxIModelFactory
 {
     [System.Flags]
@@ -16,7 +16,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
     [System.Serializable]
     public class NPVoxModificationSource
     {
-        [NPipeSelectorAttribute(typeof(NPVoxIModelFactory))]
+        [PipeSelectorAttribute(typeof(NPVoxIModelFactory))]
         public UnityEngine.Object Source; // TODO: Rename input
         public byte VoxelGroupIndex = 0;
         public Pivot Pivot;
@@ -25,7 +25,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
     [SerializeField]
     public NPVoxModificationSource[] Sources = new NPVoxModificationSource[0];
 
-    override public NPipeIImportable Input
+    override public IPipeImportable Input
     {
         set
         {
@@ -36,13 +36,13 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
         }
         get
         {
-            return Sources[0].Source as NPipeIImportable;
+            return Sources[0].Source as IPipeImportable;
         }
     }
 
-    override public NPipeIImportable[] GetAllInputs()
+    override public IPipeImportable[] GetAllInputs()
     {
-        NPipeIImportable[] sources = new NPipeIImportable[Sources.Length];
+        IPipeImportable[] sources = new IPipeImportable[Sources.Length];
         int i = 0;
         foreach (NPVoxModificationSource source in Sources)
         {
@@ -70,7 +70,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
                 //                }
 
                 //                return NPVoxModel.NewInvalidInstance(reuse, "First Source didn't have a factory set");
-                throw new NPipeException("First Source didn't have a factory set");
+                throw new PipeException("First Source didn't have a factory set");
             }
             VoxModel firstProduct = ((NPVoxIModelFactory)firstSource.Source).GetProduct();
 
@@ -110,7 +110,7 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
                     //
                     //                    return NPVoxModel.NewInvalidInstance(reuse, "Source " + i + " didn't have a factory set");
 
-                    throw new NPipeException("Source " + i + " didn't have a factory set");
+                    throw new PipeException("Source " + i + " didn't have a factory set");
                 }
 
                 VoxModel voxModel = ((NPVoxIModelFactory)Sources[i].Source).GetProduct();
@@ -183,9 +183,9 @@ public class NPVoxModelCombiner : NPVoxCompositeProcessorBase<NPVoxIModelFactory
     }
 
 #if UNITY_EDITOR
-    override public bool DrawInspector(NPipeEditFlags flags)
+    override public bool DrawInspector(EditFlags flags)
     {
-        return base.DrawInspector(flags & ~NPipeEditFlags.INPUT);
+        return base.DrawInspector(flags & ~EditFlags.INPUT);
     }
 #endif
 }

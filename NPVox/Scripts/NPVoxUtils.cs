@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class NPVoxUtils : MonoBehaviour 
+public class NPVoxUtils : MonoBehaviour
 {
-    #if UNITY_EDITOR
-    private static NPipeContainer templateImportable = null;
+#if UNITY_EDITOR
+    private static PipeContainer templateImportable = null;
 
-    public static void LoadTemplateMetadata(out NPipeContainer metadata, out bool unavailable)
+    public static void LoadTemplateMetadata(out PipeContainer metadata, out bool unavailable)
     {
         if (templateImportable != null)
         {
@@ -30,14 +30,14 @@ public class NPVoxUtils : MonoBehaviour
             return;
         }
         unavailable = false;
-        metadata = templateImportable = (NPipeContainer)AssetDatabase.LoadAssetAtPath(metadataTemplatePath, typeof(NPipeContainer));
+        metadata = templateImportable = (PipeContainer)AssetDatabase.LoadAssetAtPath(metadataTemplatePath, typeof(PipeContainer));
     }
 
-    public static NPipeContainer GetTemplatePipeline()
+    public static PipeContainer GetTemplatePipeline()
     {
         if (templateImportable == null)
         {
-            NPipeContainer template;
+            PipeContainer template;
             bool unavailable;
             LoadTemplateMetadata(out template, out unavailable);
         }
@@ -57,5 +57,5 @@ public class NPVoxUtils : MonoBehaviour
         }
         return (T)AssetDatabase.LoadAssetAtPath(metadataTemplatePath, typeof(T));
     }
-    #endif
+#endif
 }

@@ -6,7 +6,7 @@ public class NPVoxSimpifiersMenuItems : ScriptableObject
     [MenuItem("Assets/Create/NPVox/Texture Atlas", false)]
     static void CreateTextureAtlas()
     {
-        var path = NPipelineUtils.GetCreateScriptableObjectAssetPath<NPVoxTextureAtlas>();
+        var path = Utils.GetCreateScriptableObjectAssetPath<NPVoxTextureAtlas>();
 
         if (path.Length != 0)
         {

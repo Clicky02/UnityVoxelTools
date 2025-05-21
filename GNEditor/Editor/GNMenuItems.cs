@@ -12,16 +12,16 @@ public class GNMenuItems : ScriptableObject
         // foreach(GameObject go in gameObjects)
         {
             MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
-            foreach(MeshRenderer mr in meshRenderers)
+            foreach (MeshRenderer mr in meshRenderers)
             {
-                if(mr.transform.parent != gameObject.transform)
+                if (mr.transform.parent != gameObject.transform)
                 {
                     mr.transform.parent = gameObject.transform;
                 }
             }
         }
     }
-    
+
     [MenuItem("Gaianigma/Make Vox Prefabs", false)]
     static void MakeVoxPrefabs()
     {
@@ -38,10 +38,10 @@ public class GNMenuItems : ScriptableObject
             int generatedCount = 0;
             foreach (Object o in SelectedObjects)
             {
-                NPipeContainer container = o as NPipeContainer;
-                if( ! container ) continue;
-                NPVoxMeshOutput[] output = NPipelineUtils.GetByType<NPVoxMeshOutput>(container);
-                foreach( NPVoxMeshOutput pipe in output)
+                PipeContainer container = o as PipeContainer;
+                if (!container) continue;
+                NPVoxMeshOutput[] output = Utils.GetByType<NPVoxMeshOutput>(container);
+                foreach (NPVoxMeshOutput pipe in output)
                 {
                     NPVoxMeshInstance instance = pipe.Instatiate().GetComponent<NPVoxMeshInstance>();
 
